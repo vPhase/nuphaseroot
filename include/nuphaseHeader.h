@@ -24,7 +24,7 @@ namespace nuphase
       /** Default constructor */
       Header(); 
 
-#ifdef _HAVE_LIBNUPHASE
+#ifdef HAVE_LIBNUPHASE
       /** Constructor from raw data (requires libnuphase.so) */ 
       Header (const nuphase_header *event); 
 #endif 
@@ -47,8 +47,8 @@ namespace nuphase
       uint32_t readout_time[nuphase::k::num_boards];          //!< CPU time of readout, seconds
       uint32_t readout_time_ns[nuphase::k::num_boards];       //!< CPU time of readout, nanoseconds 
       uint64_t trig_time[nuphase::k::num_boards];             //!< Board trigger time (raw units) 
-      uint32_t approx_trigger_time;                  //!< Board trigger time converted to real units (approx secs), master only
-      uint32_t approx_trigger_time_nsecs;            //!< Board trigger time converted to real units (approx nnsecs), master only
+      uint32_t raw_approx_trigger_time;                  //!< Raw Board trigger time converted to real units (approx secs), master only
+      uint32_t raw_approx_trigger_time_nsecs;            //!< Raw Board trigger time converted to real units (approx nnsecs), master only
       uint16_t triggered_beams;                      //!< The beams that triggered 
       uint16_t beam_mask;                            //!< The enabled beams
       uint32_t beam_power[nuphase::k::num_beams];             //!< The power in each beam at the trigger time
@@ -63,9 +63,12 @@ namespace nuphase
       uint8_t calpulser;                             //!< Was the calpulser on? 
       uint8_t sync_problem;                          //!< Various sync problems. TODO convert to enum 
 
+
+      uint32_t corrected_trigger_time;             //!< The offline corrected triggertime
+      uint32_t corrected_triger_time_ns;           //!< The offline corrected trigger time (ns) 
+
     ClassDef(Header,1); 
   }; 
-
 } 
 
 #endif
