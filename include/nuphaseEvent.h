@@ -34,10 +34,10 @@ namespace nuphase
        * If there is no data for that channel, return NULL. 
        * This is NOT baseline subtracted. 
        */ 
-      UChar_t * getRawData(board b, int channel) const; 
+      UChar_t * getRawData(board b, int channel) const { return raw_data[b][channel].size() ?  &raw_data[b][channel][0]: 0 ; }
 
       /** Sets the calibration for this event. This is used to convert from adc to Volts*/ 
-      void setCalibrationInfo(const CalibrationInfo & info); 
+      void setCalibrationInfo(const CalibrationInfo & info) { dump_calibrated(); calibration = info; }  
 
 
       /** This creates a calibrated, properly named,  TGraph of this event 
@@ -60,16 +60,17 @@ namespace nuphase
       double * getData(int channel = 0, board b = BOARD_MASTER, 
                        double * destination, const CalibrationInfo * info = 0) const; 
 
+      uint16_t getBufferLength() const { return buffer_length; } 
+
+    private: 
       /** The event number */ 
       uint64_t event_number; 
-
       /** The buffer length */
       uint16_t buffer_length;
       uint8_t board_id[k::num_boards]; 
-
-    private: 
       std::vector<UChar_t> raw_data[k::num_boards][k::num_chans_per_board]; 
-      std::vector<double> data[k::num_boards][k::num_chans_per_board]; 
+      mutable std::vector<double> data[k::num_boards][k::num_chans_per_board]; 
+      void dump_calibrated(); 
       CalibrationInfo calibration; 
 
     ClassDef(Event,1); 

@@ -57,7 +57,18 @@ namespace nuphase
     GPIO_SPI_ENABLE = 4,
 //    GPIO_DOWNHOLE_POWER= 8 , 
     GPIO_AUX_HEATER=16 
+
   }; 
+
+  enum units
+  {
+    UNITS_NS, 
+    UNITS_SAMPLE, 
+    UNITS_ADC, 
+    UNITS_MV 
+  }
+
+  const char * getUnitString(units u); 
 
 }
 
