@@ -5,7 +5,8 @@
 #include "TObject.h" 
 #include "nuphaseConsts.h"
 #include <stdint.h> 
-#include <vector >
+#include <vector>
+#include "nuphaseCalibrationInfo.h" 
 
 class TGraph; 
 
@@ -15,8 +16,6 @@ struct nuphase_event;
 
 namespace nuphase
 {
-
-  class CalibrationInfo; 
 
   class Event : public TObject 
   {
@@ -35,7 +34,11 @@ namespace nuphase
        * If there is no data for that channel, return NULL. 
        * This is NOT baseline subtracted. 
        */ 
-      UChar_t * getRawData(nuphase::board b, int channel) const; 
+      UChar_t * getRawData(board b, int channel) const; 
+
+      /** Sets the calibration for this event. This is used to convert from adc to Volts*/ 
+      void setCalibrationInfo(const CalibrationInfo & info); 
+
 
       /** This creates a calibrated, properly named,  TGraph of this event 
        *
@@ -43,24 +46,31 @@ namespace nuphase
        *  deleting it is the responsibility of the user. 
        *
        *  If calibration info is passed, then that will be used to calibrate the voltage scale. Otherwise,
-       *  it will just be baseline-subtracted. 
+       *  it will just be baseline-subtracted.
        *
        **/ 
-      TGraph * getData(int channel = 0, 
-                       nuphase::board b = nuphase::BOARD_MASTER, 
-                       TGraph * useme = 0, CalibrationInfo * info = 0) const; 
+      TGraph * getGraph(int channel = 0, 
+                       board b = BOARD_MASTER, 
+                       TGraph * useme = 0, const CalibrationInfo * info = 0) const; 
 
+      /** Retrieves calibrated data
+       * 
+       *
+       **/ 
+      double * getData(int channel = 0, board b = BOARD_MASTER, 
+                       double * destination, const CalibrationInfo * info = 0) const; 
 
       /** The event number */ 
       uint64_t event_number; 
 
-
       /** The buffer length */
       uint16_t buffer_length;
-      uint8_t board_id[nuphase::k::num_boards]; 
+      uint8_t board_id[k::num_boards]; 
 
     private: 
-      std::vector<UChar_t> data[nuphase::k::num_boards][nuphase::k::num_chans_per_board]; 
+      std::vector<UChar_t> raw_data[k::num_boards][k::num_chans_per_board]; 
+      std::vector<double> data[k::num_boards][k::num_chans_per_board]; 
+      CalibrationInfo calibration; 
 
     ClassDef(Event,1); 
 

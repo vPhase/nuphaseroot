@@ -23,7 +23,7 @@ namespace nuphase
     TRIGGER_RF = 1, 
     TRIGGER_SW = 2, 
     TRIGGER_EXT = 4 
-  } 
+  } ;
 
   enum sync_problem
   {
@@ -32,14 +32,14 @@ namespace nuphase
     SYNC_PROBLEM_TRIGNUM_MISMATCH=2, 
     SYNC_PROBLEM_TRIGTYPE_MISMATCH=4, 
     SYNC_PROBLEM_MASTER_SLAVE_BUFFER_MISMATCH=8 
-  } 
+  } ;
 
   enum scaler_type
   {
     SCALER_SLOW, 
     SCALER_SLOW_GATED,
     SCALER_FAST
-  } 
+  } ;
 
   enum asps_power_state
   {
@@ -48,7 +48,7 @@ namespace nuphase
     ASPS_POWER_SLAVE    = 4, 
     ASPS_POWER_MASTER   = 8, 
     ASPS_POWER_SWITCH   = 16  
-  }
+  };
 
   enum gpio_power_state
   {
@@ -59,5 +59,6 @@ namespace nuphase
     GPIO_AUX_HEATER=16 
   }; 
 
+}
 
 #endif

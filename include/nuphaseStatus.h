@@ -23,12 +23,12 @@ namespace nuphase
     Status (const nuphase_status *status); 
 #endif 
 
-    uint16_t global_scalers[nuphase::k::num_scalers];  //!< The overall scalers 
-    uint16_t beam_scalers[nuphase::k::num_scalers][nuphase::k::num_beams]; //!< The scalers for each beam 
+    uint16_t global_scalers[k::num_scalers];  //!< The overall scalers 
+    uint16_t beam_scalers[k::num_scalers][k::num_beams]; //!< The scalers for each beam 
     uint32_t deadtime; //!< Deadtime fraction (units tbd) 
     uint32_t readout_time; //!< CPU time of readout
     uint32_t readout_time_ns; //!< CPU time ns of readout
-    uint32_t trigger_thresholds[nuphase::k::num_beams]; //!< Trigger thresholds 
+    uint32_t trigger_thresholds[k::num_beams]; //!< Trigger thresholds 
     uint64_t latched_pps_time; //!< timestamp corresponding to a pps time
     uint8_t  board_id; //!< the board number assigned at startup 
 
