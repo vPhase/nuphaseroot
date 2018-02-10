@@ -17,7 +17,7 @@ namespace nuphase
       /* Construct the default CalibrationInfo */ 
       CalibrationInfo(); 
 
-      double getVoltageCalibration(int board, int chan) const { return voltage_calibration[board][chan]; } 
+      double getVoltageCalibration(board b, int chan) const { return voltage_calibration[b][chan]; } 
       double getTimeCalibration() const { return time_calibration; } 
       units getTimeUnits()const  { return t; }
       units getVoltageUnits()const  { return v; }

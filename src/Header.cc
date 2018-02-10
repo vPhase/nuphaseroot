@@ -1,5 +1,6 @@
 #include "nuphaseHeader.h" 
 
+ClassImp(nuphase::Header); 
 
 #ifdef HAVE_LIBNUPHASE
 
@@ -38,10 +39,10 @@ nuphase::Header::Header(nuphase_header *hd)
 #endif
 
 
-nuphaseHeader::Header::Header()
+nuphase::Header::Header()
 {
       memset(&trig_number,0,sizeof(trig_number));
-      memset(&buffer_length,0,sizeof(buffer_lengt))h;
+      memset(&buffer_length,0,sizeof(buffer_length));
       memset(&pretrigger_samples,0,sizeof(pretrigger_samples));
       memset(&readout_time,0,sizeof(readout_time));
       memset(&readout_time_ns,0,sizeof(readout_time_ns))  ;

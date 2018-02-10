@@ -43,6 +43,7 @@ namespace nuphase
 
   enum asps_power_state
   {
+    ASPS_POWER_NONE = 0, 
     ASPS_POWER_FRONTEND = 1,
     ASPS_POWER_SBC      = 2, 
     ASPS_POWER_SLAVE    = 4, 
@@ -52,6 +53,7 @@ namespace nuphase
 
   enum gpio_power_state
   {
+    GPIO_POWER_NONE =0, 
     GPIO_FPGA_POWER_MASTER = 1, 
     GPIO_FPGA_POWER_SLAVE = 2,
     GPIO_SPI_ENABLE = 4,
@@ -66,7 +68,7 @@ namespace nuphase
     UNITS_SAMPLE, 
     UNITS_ADC, 
     UNITS_MV 
-  }
+  }; 
 
   const char * getUnitString(units u); 
 

@@ -14,6 +14,6 @@ const char * nuphase::getUnitString(nuphase::units u)
      case UNITS_MV: 
       return "mV"; 
      default: 
-      return "???" 
+      return "???" ; 
   }
 }

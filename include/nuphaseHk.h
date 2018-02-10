@@ -2,6 +2,7 @@
 #define NUPHASE_HK_H
 
 
+#include "nuphaseConsts.h" 
 #include "TObject.h" 
 
 #ifdef HAVE_LIBNUPHASE

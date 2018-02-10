@@ -7,10 +7,10 @@
 #pragma link C++ namespace nuphase; 
 #pragma link C++ namespace nuphase::k; 
 
-#pragma link C++ class nuphase::Event;
-#pragma link C++ class nuphase::Header;
-#pragma link C++ class nuphase::Status;
-#pragma link C++ class nuphase::Hk;
-#pragma link C++ class nuphase::CalibrationInfo;
+#pragma link C++ class nuphase::Event+;
+#pragma link C++ class nuphase::Header+;
+#pragma link C++ class nuphase::Status+;
+#pragma link C++ class nuphase::Hk+;
+#pragma link C++ class nuphase::CalibrationInfo+;
 
 

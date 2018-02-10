@@ -7,22 +7,21 @@
 
 .PHONY: all configure clean cleaner install cmake-build cmake-clean cmake-install
 
+CMAKE?=cmake
+CCMAKE?=ccmake
+
+
 all: cmake-build 
 clean: cmake-clean
 install: cmake-install 
 
 
-### TODO add doxygen into CMakelists 
-doc: legacy-doc
-
 cmake-build: build/Makefile 
 	@+make -C  ./build
 
-legacy-doc: 
-	@make -f Makefile.legacy doc 
 
 configure: build/Makefile 
-	@ccmake . build 
+	@$(CCMAKE) . build 
 
 cmake-install: 
 	@make -C ./build install 
@@ -31,7 +30,7 @@ build/Makefile:
 	@echo "Setting up cmake build."
 	@mkdir -p build 
 #	rm -rf bin
-	@cd build && cmake ../ 
+	@cd build && $(CMAKE) ../ 
 #	ln -sf build/bin bin 
 
 distclean: 

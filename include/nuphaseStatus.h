@@ -3,7 +3,6 @@
 
 #include "TObject.h" 
 #include "nuphaseConsts.h" 
-#include <vector> 
 
 #ifdef HAVE_LIBNUPHASE
 struct nuphase_struct; 

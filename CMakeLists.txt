@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.8.10)
+
 project(nuphaseroot)
 set(libname "nuphaseroot")
-
 
 list(APPEND CMAKE_PREFIX_PATH $ENV{ROOTSYS})
 
@@ -27,7 +27,6 @@ endif()
 
 #---Locate the ROOT package and defines a number of variables (e.g. ROOT_INCLUDE_DIRS)
 find_package(ROOT REQUIRED)
-
 
 
 #---Define useful ROOT functions and macros (e.g. ROOT_GENERATE_DICTIONARY)

@@ -1,5 +1,7 @@
 #include "nuphaseCalibrationInfo.h" 
 
+ClassImp(nuphase::CalibrationInfo); 
+
 nuphase::CalibrationInfo::CalibrationInfo() 
 {
   time_calibration = 1/1.5;
