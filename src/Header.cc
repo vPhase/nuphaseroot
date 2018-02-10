@@ -4,11 +4,13 @@ ClassImp(nuphase::Header);
 
 #ifdef HAVE_LIBNUPHASE
 
-nuphase::Header::Header(nuphase_header *hd) 
+#include "nuphase.h" 
+
+nuphase::Header::Header(const nuphase_header *hd) 
 {
       memcpy(&event_number,&hd->event_number,sizeof(event_number));
       memcpy(&trig_number,&hd->trig_number,sizeof(trig_number));
-      memcpy(&buffer_length,&hd->buffer_length,sizeof(buffer_lengt))h;
+      memcpy(&buffer_length,&hd->buffer_length,sizeof(buffer_length));
       memcpy(&pretrigger_samples,&hd->pretrigger_samples,sizeof(pretrigger_samples));
       memcpy(&readout_time,&hd->readout_time,sizeof(readout_time));
       memcpy(&readout_time_ns,&hd->readout_time_ns,sizeof(readout_time_ns))  ;
@@ -62,5 +64,8 @@ nuphase::Header::Header()
       memset(&trigger_type,0,sizeof(trigger_type)); 
       memset(&calpulser,0,sizeof(calpulser)); 
       memset(&sync_problem,0,sizeof(sync_problem)); 
+
+      corrected_trigger_time = 0; 
+      corrected_trigger_time_ns = 0; 
 }
 

@@ -125,7 +125,7 @@ if (LIBNUPHASE_SUPPORT)
     message ("Assuming libnuphase is in NUPHASE_INSTALL_DIR") 
   else()
     include_directories(${LIBNUPHASE_PATH}) 
-    target_link_libraries(${libname} nuphase ${ZLIB_LIBRARIES}) 
+    target_link_libraries(${libname} ${NUPHASE_LIB} ${ZLIB_LIBRARIES}) 
   endif()
 endif(LIBNUPHASE_SUPPORT) 
 

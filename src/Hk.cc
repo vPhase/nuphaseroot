@@ -9,7 +9,7 @@ ClassImp(nuphase::Hk);
 nuphase::Hk::Hk(const nuphase_hk * hk) 
 {
     unixTime=hk->unixTime; 
-    unixTimeMilliSecs=hk->unixTimeMilliSecs; 
+    unixTimeMilliSecs=hk->unixTimeMillisecs; 
     temp_master=hk->temp_master; 
     temp_slave=hk->temp_slave; 
     temp_case=hk->temp_case; 
@@ -19,9 +19,9 @@ nuphase::Hk::Hk(const nuphase_hk * hk)
     current_frontend=hk->current_frontend; 
     current_sbc=hk->current_sbc; 
     current_switch=hk->current_switch; 
-    on_state=hk->on_state; 
-    fault_state=hk->fault_state; 
-    gpio_state=hk->gpio_state; 
+    on_state= (asps_power_state) hk->on_state; 
+    fault_state= (asps_power_state) hk->fault_state; 
+    gpio_state= (gpio_power_state) hk->gpio_state; 
     disk_space_kB=hk->disk_space_kB; 
     free_mem_kB=hk->free_mem_kB;  
     asps_heater_current=hk->asps_heater_current; 

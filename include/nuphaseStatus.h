@@ -5,7 +5,7 @@
 #include "nuphaseConsts.h" 
 
 #ifdef HAVE_LIBNUPHASE
-struct nuphase_struct; 
+struct nuphase_status; 
 #endif
 
 

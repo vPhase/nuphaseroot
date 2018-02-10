@@ -64,7 +64,7 @@ namespace nuphase
 
 
       uint32_t corrected_trigger_time;             //!< The offline corrected triggertime
-      uint32_t corrected_triger_time_ns;           //!< The offline corrected trigger time (ns) 
+      uint32_t corrected_trigger_time_ns;           //!< The offline corrected trigger time (ns) 
 
     ClassDef(Header,1); 
   }; 
