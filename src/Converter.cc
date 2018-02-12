@@ -7,6 +7,10 @@
 #include "TTree.h" 
 #include "TFile.h" 
 
+static bool allow_overwrite = false; 
+void nuphase::convert::setAllowOverwrite(bool allow) { allow_overwrite = allow; } 
+
+
 #ifdef HAVE_LIBNUPHASE
 #include "nuphase.h" 
 
@@ -17,9 +21,6 @@
 #include <sys/stat.h> 
 #include <unistd.h> 
 #include <algorithm> 
-
-static bool allow_overwrite = false; 
-void nuphase::convert::setAllowOverwrite(bool allow) { allow_overwrite = allow; } 
 
 template <class RootType, class RawType, int(*RawReadFunction)(gzFile,RawType*)>
 static int convert_impl(int nfiles, const char ** infiles, const char * outfile, const char * treename) 

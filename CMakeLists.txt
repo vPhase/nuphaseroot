@@ -71,12 +71,9 @@ install (TARGETS ${libname}
 	ARCHIVE DESTINATION ${UTIL_LIB_DIR}
 	LIBRARY DESTINATION ${UTIL_LIB_DIR}
 	RUNTIME DESTINATION ${UTIL_BIN_DIR})
-install (DIRECTORY calib/ DESTINATION ${UTIL_SHARE_DIR}/anitaCalib)
-      #Only needed for ROOT6
       
 if( ${ROOT_VERSION} VERSION_GREATER "5.99.99")
-  install (FILES ${PROJECT_BINARY_DIR}/${DICTNAME}_rdict.pcm DESTINATION ${UTIL_LIB_DIR})
-#  install (FILES ${PROJECT_BINARY_DIR}/lib${libname}.rootmap DESTINATION ${UTIL_LIB_DIR})
+  install (FILES ${PROJECT_BINARY_DIR}/lib${libname}.rootmap DESTINATION ${UTIL_LIB_DIR})
 endif() 
 
 
@@ -132,12 +129,15 @@ endif(LIBNUPHASE_SUPPORT)
 
 set (BINSRCDIR programs) 
 macro(add_program binary_name ) 
-  add_executable(${binary_name} ${BINSRCDIR}/${binary_name}.cxx) 
+  add_executable(${binary_name} ${BINSRCDIR}/${binary_name}.cc) 
   target_link_libraries(${binary_name}  ${ROOT_LIBRARIES} ${libname})
   if (LIBNUPHASE_SUPPORT)
     target_link_libraries(${binary_name}  ${ZLIB_LIBRARIES} nuphase)
   endif()
   INSTALL (PROGRAMS ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${binary_name} DESTINATION ${UTIL_BIN_DIR})
 endmacro() 
+
+add_program(nuphaseroot-convert) 
+
 
 
