@@ -1,18 +1,17 @@
+#include <stdio.h> 
+#include "nuphaseConverter.h" 
+#include "nuphaseEvent.h" 
+#include "nuphaseHeader.h" 
+#include "nuphaseStatus.h" 
+#include "nuphaseHk.h" 
+#include "TTree.h" 
+#include "TFile.h" 
 
 #ifdef HAVE_LIBNUPHASE
-
-#include "nuphaseConverter.h" 
-#include "nuphaseHk.h" 
-#include "nuphaseEvent.h" 
-#include "nuphaseStatus.h" 
-#include "nuphaseHeader.h" 
 #include "nuphase.h" 
 
 #include <vector> 
-#include "TTree.h" 
 #include <zlib.h>
-#include "TFile.h" 
-#include <stdio.h> 
 #include <dirent.h> 
 #include <sys/types.h> 
 #include <sys/stat.h> 
@@ -166,6 +165,92 @@ int nuphase::convert::convertRun(const char * base_raw, const char * base_root, 
 } 
 
 
+#else
+
+int nuphase::convert::convertHkFiles(int nfiles, const char ** infiles, const char * outfile) 
+{
+  (void) nfiles; 
+  (void) infiles; 
+  (void) outfile; 
+  fprintf(stderr,"%s requires HAVE_LIBNUPHASE\n",__func__); 
+  return -1; 
+}
+
+int nuphase::convert::convertHeaderFiles(int nfiles, const char ** infiles, const char * outfile) 
+{
+
+  (void) nfiles; 
+  (void) infiles; 
+  (void) outfile; 
+  fprintf(stderr,"%s requires HAVE_LIBNUPHASE\n",__func__); 
+  return -1; 
+}
+
+int nuphase::convert::convertEventFiles(int nfiles, const char ** infiles, const char * outfile) 
+{
+  (void) nfiles; 
+  (void) infiles; 
+  (void) outfile; 
+  fprintf(stderr,"%s requires HAVE_LIBNUPHASE\n",__func__); 
+  return -1; 
+}
+
+int nuphase::convert::convertStatusFiles(int nfiles, const char ** infiles, const char * outfile) 
+{
+  (void) nfiles; 
+  (void) infiles; 
+  (void) outfile; 
+  fprintf(stderr,"%s requires HAVE_LIBNUPHASE\n",__func__); 
+  return -1; 
+}
+
+
+int nuphase::convert::convertHkDir(const char * dir, const char * outfile) 
+{
+  (void) dir; 
+  (void) outfile; 
+  fprintf(stderr,"%s requires HAVE_LIBNUPHASE\n",__func__); 
+  return -1; 
+}
+
+int nuphase::convert::convertHeaderDir(const char * dir, const char * outfile) 
+{
+
+  (void) dir; 
+  (void) outfile; 
+  fprintf(stderr,"%s requires HAVE_LIBNUPHASE\n",__func__); 
+  return -1; 
+}
+
+int nuphase::convert::convertEventDir(const char * dir, const char * outfile) 
+{
+  (void) dir; 
+  (void) outfile; 
+  fprintf(stderr,"%s requires HAVE_LIBNUPHASE\n",__func__); 
+  return -1; 
+}
+
+int nuphase::convert::convertStatusDir(const char * dir, const char * outfile) 
+{
+  (void) dir; 
+  (void) outfile; 
+  fprintf(stderr,"%s requires HAVE_LIBNUPHASE\n",__func__); 
+  return -1; 
+}
+
+
+int nuphase::convert::convertRun(const char * base_raw, const char * base_root, int run) 
+{
+  (void) base_raw; 
+  (void) base_root; 
+  (void) run; 
+  fprintf(stderr,"%s requires HAVE_LIBNUPHASE\n",__func__); 
+  return -1; 
+
+} 
+
+
+#endif
 
 int nuphase::convert::makeFilteredHeadTree(const char * filtered_event_file, const char * full_head_file, const char * filtered_head_file) 
 {
@@ -206,5 +291,3 @@ int nuphase::convert::makeFilteredHeadTree(const char * filtered_event_file, con
 
 
 
-
-#endif

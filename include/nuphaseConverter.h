@@ -12,7 +12,6 @@ namespace nuphase
   {
 
 
-#ifdef HAVE_LIBNUPHASE
  
   
   /** Are we allowed to overwrite files? (default is no) */ 
@@ -54,12 +53,10 @@ namespace nuphase
   /** Convert a single Event file into a ROOT file */ 
   inline int convertEventFile(const char * infile, const char * outfile) { return convertEventFiles(1,&infile,outfile); } 
 
-
   int makeFilteredHeadTree(const char * filtered_event_file, const char * full_head_file, const char * filtered_head_file); 
 
   int convertRun(const char * basedir_raw, const char * basedir_root, int run); 
 
-#endif
   }
 }
 

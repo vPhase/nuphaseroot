@@ -4,9 +4,9 @@
 #pragma link off all namespaces;
 
 
-#pragma link C++ namespace nuphase; 
-#pragma link C++ namespace nuphase::k; 
-#pragma link C++ namespace nuphase::converter; 
+#pragma link C++ namespace nuphase+; 
+#pragma link C++ namespace nuphase::k+; 
+#pragma link C++ namespace nuphase::convert+; 
 
 #pragma link C++ class nuphase::Event+;
 #pragma link C++ class nuphase::Header+;
