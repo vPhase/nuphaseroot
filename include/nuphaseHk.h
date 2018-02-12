@@ -15,6 +15,8 @@ namespace nuphase
   class Hk  : public TObject 
   {
 
+    public: 
+
     Hk(); 
 #ifdef HAVE_LIBNUPHASE
     Hk (const nuphase_hk * hk); 

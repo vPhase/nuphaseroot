@@ -19,43 +19,43 @@ namespace nuphase
   void setAllowOverwrite(bool allow);  
 
   /** Convert a set of Hk files to a ROOT tree */ 
-  int convertHkFiles(int nfiles, const char ** infiles, const char * outfile, const char * treeName = "hk"); 
+  int convertHkFiles(int nfiles, const char ** infiles, const char * outfile); 
 
   /** Convert a directory of Hk files to a ROOT tree. Files will be sorted by mtime */ 
-  int convertHkDir(const char * dir, const char * outfile, const char * treeName = "hk"); 
+  int convertHkDir(const char * dir, const char * outfile); 
 
   /** Convert a single Hk file into a ROOT file */ 
-  int convertHkFile(const char * infile, const char * outfile, const char * treeName = "hk") { convertHkFiles(1,&infile,outfile, treeName); } 
+  inline int convertHkFile(const char * infile, const char * outfile) { return convertHkFiles(1,&infile,outfile); } 
 
   /** Convert a set of Header files to a ROOT tree */ 
-  int convertHeaderFiles(int nfiles, const char ** infiles, const char * outfile, const char * treeName = "header"); 
+  int convertHeaderFiles(int nfiles, const char ** infiles, const char * outfile); 
 
   /** Convert a directory of Header files to a ROOT tree. Files will be sorted by mtime */ 
-  int convertHeaderDir(const char * dir, const char * outfile, const char * treeName = "header"); 
+  int convertHeaderDir(const char * dir, const char * outfile); 
 
   /** Convert a single Header file into a ROOT file */ 
-  int convertHeaderFile(const char * infile, const char * outfile, const char * treeName = "header") { convertHeaderFiles(1,&infile,outfile, treeName); } 
+  inline int convertHeaderFile(const char * infile, const char * outfile) {return  convertHeaderFiles(1,&infile,outfile); } 
 
   /** Convert a set of Status files to a ROOT tree */ 
-  int convertStatusFiles(int nfiles, const char ** infiles, const char * outfile, const char * treeName = "status"); 
+  int convertStatusFiles(int nfiles, const char ** infiles, const char * outfile); 
 
   /** Convert a directory of Status files to a ROOT tree. Files will be sorted by mtime */ 
-  int convertStatusDir(const char * dir, const char * outfile, const char * treeName = "status"); 
+  int convertStatusDir(const char * dir, const char * outfile); 
 
   /** Convert a single Status file into a ROOT file */ 
-  int convertStatusFile(const char * infile, const char * outfile, const char * treeName = "status") { convertStatusFiles(1,&infile,outfile, treeName); } 
+  inline int convertStatusFile(const char * infile, const char * outfile) { return convertStatusFiles(1,&infile,outfile); } 
 
   /** Convert a set of Event files to a ROOT tree */ 
-  int convertEventFiles(int nfiles, const char ** infiles, const char * outfile, const char * treeName = "event"); 
+  int convertEventFiles(int nfiles, const char ** infiles, const char * outfile); 
 
   /** Convert a directory of Event files to a ROOT tree. Files will be sorted by mtime */ 
-  int convertEventDir(const char * dir, const char * outfile, const char * treeName = "event"); 
+  int convertEventDir(const char * dir, const char * outfile); 
 
   /** Convert a single Event file into a ROOT file */ 
-  int convertEventFile(const char * infile, const char * outfile, const char * treeName = "event") { convertEventFiles(1,&infile,outfile, treeName); } 
+  inline int convertEventFile(const char * infile, const char * outfile) { return convertEventFiles(1,&infile,outfile); } 
 
 
-  int makeFilteredHeadTree(const char * filtered_event_file, const char * full_head_file, const char  filtered_head_file = 0); 
+  int makeFilteredHeadTree(const char * filtered_event_file, const char * full_head_file, const char * filtered_head_file); 
 
   int convertRun(const char * basedir_raw, const char * basedir_root, int run); 
 

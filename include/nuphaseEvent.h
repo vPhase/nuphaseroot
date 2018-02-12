@@ -60,6 +60,8 @@ namespace nuphase
 
       uint16_t getBufferLength() const { return buffer_length; } 
 
+      uint64_t getEventNumber() const { return event_number; } 
+
     private: 
       /** The event number */ 
       uint64_t event_number; 
