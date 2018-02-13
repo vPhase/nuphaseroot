@@ -17,3 +17,17 @@ const char * nuphase::getUnitString(nuphase::units u)
       return "???" ; 
   }
 }
+
+const char * nuphase::getBoardString(nuphase::board b) 
+{
+
+  switch(b)
+  {
+    case BOARD_MASTER : 
+      return "MASTER"; 
+    case BOARD_SLAVE : 
+      return "SLAVE"; 
+    default: 
+      return "???"; 
+  }
+}

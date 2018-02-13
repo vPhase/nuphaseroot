@@ -71,6 +71,7 @@ namespace nuphase
   }; 
 
   const char * getUnitString(units u); 
+  const char * getBoardString(board b); 
 
 }
 
