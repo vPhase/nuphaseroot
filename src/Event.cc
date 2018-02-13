@@ -1,6 +1,8 @@
 #include "nuphaseEvent.h" 
 
 ClassImp(nuphase::Event);
+#include "TGraph.h" 
+#include "TAxis.h" 
 
 
 #ifdef HAVE_LIBNUPHASE
@@ -19,7 +21,11 @@ nuphase::Event::Event(const nuphase_event * event)
 
     for (int c = 0; c < k::num_chans_per_board; c++)
     {
-      raw_data[b][c].insert(raw_data[b][c].begin(), event->data[b][c], event->data[b][c] + buffer_length); 
+      raw_data[b][c].resize(buffer_length); 
+      for (int i = 0; i < buffer_length; i++)
+      {
+        raw_data[b][c][i] = event->data[b][c][i]; 
+      }
     }
   }
 }
@@ -79,6 +85,29 @@ double * nuphase::Event::copyData(int c, board b, double * destination) const
   }
 
   return destination; 
+}
+
+TGraph * nuphase::Event::getGraph(int channel, board b, TGraph * g) const
+{
+  if (!g) g = new TGraph(buffer_length); 
+  else g->Set(buffer_length); 
+
+  copyData(channel,b, g->GetY()); 
+
+
+  for (int i = 0; i < g->GetN(); i++) 
+  {
+    g->GetX()[i] = i * calibration.getTimeCalibration(); 
+  }
+
+  g->GetYaxis()->SetTitle(getUnitString(calibration.getVoltageUnits())); 
+  g->GetXaxis()->SetTitle(getUnitString(calibration.getTimeUnits())); 
+
+  TString title;
+  title.Form("Board %s, Channel %d\n", nuphase::getBoardString(b),channel); 
+  g->SetTitle(title.Data()); 
+  return g; 
+
 }
 
 
