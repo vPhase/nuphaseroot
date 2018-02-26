@@ -24,7 +24,7 @@ nuphase::Header::Header(const nuphase_header *hd)
       memcpy(&buffer_number,&hd->buffer_number,sizeof(buffer_number));
       memcpy(&channel_mask,&hd->channel_mask,sizeof(channel_mask));
       memcpy(&channel_read_mask,&hd->channel_read_mask,sizeof(channel_read_mask));
-      memcpy(&channel_overflow,&hd->channel_overflow,sizeof(channel_overflow));
+      memcpy(&gate_flag,&hd->gate_flag,sizeof(gate_flag));
 
       memcpy(&buffer_mask,&hd->buffer_mask,sizeof(buffer_mask));
       memcpy(&board_id,&hd->board_id,sizeof(board_id)); 
@@ -58,7 +58,7 @@ nuphase::Header::Header()
       memset(&buffer_number,0,sizeof(buffer_number));
       memset(&channel_mask,0,sizeof(channel_mask));
       memset(&channel_read_mask,0,sizeof(channel_read_mask));
-      memset(&channel_overflow,0,sizeof(channel_overflow));
+      memset(&gate_flag,0,sizeof(gate_flag));
       memset(&buffer_mask,0,sizeof(buffer_mask));
       memset(&board_id,0,sizeof(board_id)); 
       memset(&trigger_type,0,sizeof(trigger_type)); 

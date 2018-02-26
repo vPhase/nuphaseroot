@@ -55,7 +55,7 @@ namespace nuphase
       uint8_t buffer_number;                         //!< the buffer number (do we need this?) 
       uint8_t channel_mask;                          //!< The channels allowed to participate in the trigger
       uint8_t channel_read_mask[k::num_boards];      //!< The channels actually read
-      uint8_t channel_overflow;                      //!< Bitmask of channels that overflowed the 5 bits 
+      uint8_t gate_flag;                      //!< Gate flag (can be used to identify cal pulser) 
       uint8_t buffer_mask;                           //!< The buffer mask at time of read out (do we want this?)   
       uint8_t board_id[k::num_boards];      //!< The board number assigned at startup. If board_id[1] == 0, no slave. 
       trig_type trigger_type;                 //!< The trigger type? 
