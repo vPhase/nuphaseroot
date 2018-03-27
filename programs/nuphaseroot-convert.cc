@@ -43,6 +43,7 @@ int main (int nargs, char ** args)
     }
   }
 
+  nuphase::convert::setAllowOverwrite(true); 
 
   int nproc = 0;
   if (!strcasecmp(what,"hk"))
