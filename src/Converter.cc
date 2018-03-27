@@ -279,10 +279,10 @@ int nuphase::convert::makeFilteredHeadTree(const char * filtered_event_file, con
   for (int i = 0; i < eventTree->GetEntries(); i++) 
   {
     eventTree->GetEntry(i); 
-    headTree->GetEntryWithIndex(ev->getEventNumber()); 
+    headTree->GetEntry(ev->getEventNumber() % 1000000000-1); 
+//    printf("%lld %lld\n", ev->getEventNumber(), hd->event_number); 
+    of.cd(); 
     filteredTree->Fill(); 
-
-
   }
 
 
