@@ -11,8 +11,9 @@
 
 void printUsage()
 {
-  printf("tldr: nuphaseroot-convert  what=[hk status header event] input=[input file | input files | input dir ] output_file.root \n\n"); 
+  printf("tldr: nuphaseroot-convert  what=[hk status header event filtered_header] input=[input file | input files | input dir | filtered_event_file full_head_file ] output_file.root \n\n"); 
   printf("nuphaseroot-convert will convert raw nuphase files into a root tree. The second argument is the type of file to convert (hk, status, header or event). The last argument is the output ROOT file. Between the type and the output can be a single file, multiple files, or a single directory.\n"); 
+  printf("If the second argument is filtered_header, then you should pass the filtered event file followed by the full head file and the filtered output file.\n"); 
 }
 
 
@@ -63,6 +64,10 @@ int main (int nargs, char ** args)
   {
     if (is_dir) nproc = nuphase::convert::convertEventDir(args[2],args[3]);
     else nproc = nuphase::convert::convertEventFiles(ninputs, (const char **) args+2, args[nargs-1]); 
+  }
+  else if (!strcasecmp(what,"filtered_header") && nargs > 4)
+  {
+    return nuphase::convert::makeFilteredHeadTree(args[2],args[3],args[4]); 
   }
   else
   {
