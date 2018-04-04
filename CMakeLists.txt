@@ -138,6 +138,7 @@ macro(add_program binary_name )
 endmacro() 
 
 add_program(nuphaseroot-convert) 
+add_program(nuphaseroot-decimate) 
 
 
 
