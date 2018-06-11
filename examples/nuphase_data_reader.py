@@ -1,15 +1,51 @@
-##Example for how to read nuphase data with python #
+#! /usr/bin/env python 
+
+# Example for how to read nuphase data with python This mostly defines a
+# nuphase_data_reader class, but if you run it as a script it  will try to plot
+# some waveforms from run 360. Normally, you would do something like
+#    
+#   import nuphase_data_reader 
+#   d = nuphase_data_reader.Reader("/path/to/data",runno)  
+#   d.setEntry(someInterestingEntry) 
+#   d.wf(0) # get a numpy array of channel 0 
+
+
 
 import ROOT
 import numpy 
 import sys
 
-## you may need to hardcode the location here 
+
+## You need to load the libnuphaseroot library
+## For the following line to work, the shared library must be in 
+## your dynamic loader path (LD_LIBRARY_PATH or DYLD_LIBRARY_PATH, accordingly) 
+
 ROOT.gSystem.Load("libnuphaseroot.so"); 
 
 
-class nuphase_data_reader:
+## A class to read in data from a run
+##  
+##   e.g. d = nuphase_data_reader("/path/to/runs",runno) 
+##
+##   To select the 100th entry in the run
+##     d.setEntry(65079); 
+##   Or, you can select by event number instead 
+##     d.setEvent(360000065079); 
+##  
+##   You can then obtain the corresponding header, event or status objects
+##     d.header()
+##     d.event() 
+##     d.status()  (this gets the status with the closest readout time to the event) 
+##    
+##   For now, you can look at the c++ doc to see what is in each
+##  
+##  You can also numpy arrays of the waveform values and time using 
+##  d.wf(channel)  
+##  Channels 0-7 are on the master board, channels 8-11 are on the slave. 
+##   
+##  For convenience, d.t() makes a time array with the right number of samples (the sample rate is always 1.5 GSPS) 
 
+class Reader:
 
   def __init__(self,base_dir, run):
 
@@ -38,7 +74,6 @@ class nuphase_data_reader:
 
     self.current_entry = 0; 
     
-
   def setEntry(self,i): 
     if (i < 0 or i >= self.head_tree.GetEntries()):
       sys.stderr.write("Entry out of bounds!") 
@@ -63,36 +98,46 @@ class nuphase_data_reader:
     return numpy.linspace(0, self.event().getBufferLength() /1.5, self.event().getBufferLength()) 
 
   def header(self,force_reload = False): 
-    if (self.header_entry != self.current_entry or force_reload): 
+    if (self.head_entry != self.current_entry or force_reload): 
       self.head_tree.GetEntry(self.current_entry); 
       self.head_entry = self.current_entry 
     return self.head 
 
   def status(self,force_reload = False): 
     if (self.status_entry != self.current_entry or force_reload): 
-      self.status_tree.GetEntryWithBestIndex(self.header().readoutTime, self.header().readoutTimeNs)
+      self.status_tree.GetEntry(self.status_tree.GetEntryNumberWithBestIndex(self.header().readout_time[0], self.header().readout_time_ns[0]))
       self.status_entry = self.current_entry
 
     return self.stat
 
   
 
-  
 
+
+# Plot some waveforms is run as a binary 
 if __name__=="__main__": 
 
+## pyplot for plotting
   import matplotlib.pyplot as plt
 
+# If your data is elsewhere, pass it as an argument
   datapath = sys.arvg[1] if len(sys.argv) > 1 else "/data/nuphase/root"
-  d = nuphase_data_reader(datapath,360) 
+
+# look at run 360
+  d = Reader(datapath,360) 
+# this is a SPIceCore event
   d.setEntry(65079) 
 
+## dump the headers and status, just to show they're there
+  d.header().Dump(); 
+  d.status().Dump(); 
+
+# plot all waveforms
   for i in range(12): 
     plt.subplot(3,4,i+1); 
     plt.plot(d.t(), d.wf(i))
   
   plt.show() 
-
 
 
 
