@@ -4,8 +4,8 @@ import ROOT
 import numpy 
 import sys
 
-## you may need to hardcode the location here" 
-ROOT.gSystem.Load("../build/libnuphaseroot.so"); 
+## you may need to hardcode the location here 
+ROOT.gSystem.Load("libnuphaseroot.so"); 
 
 
 class nuphase_data_reader:
@@ -57,7 +57,10 @@ class nuphase_data_reader:
 
 
   def wf(self,ch = 0):  
-    return numpy.frombuffer(self.event().getRawData(ch % 8, ch/8), numpy.dtype('int8'), self.event().getBufferLength()) 
+    return numpy.frombuffer(self.event().getRawData(ch % 8, ch/8), numpy.dtype('int8'), self.event().getBufferLength()) - 64 
+
+  def t(self):
+    return numpy.linspace(0, self.event().getBufferLength() /1.5, self.event().getBufferLength()) 
 
   def header(self,force_reload = False): 
     if (self.header_entry != self.current_entry or force_reload): 
@@ -75,6 +78,27 @@ class nuphase_data_reader:
   
 
   
+
+if __name__=="__main__": 
+
+  import matplotlib.pyplot as plt
+
+  datapath = sys.arvg[1] if len(sys.argv) > 1 else "/data/nuphase/root"
+  d = nuphase_data_reader(datapath,360) 
+  d.setEntry(65079) 
+
+  for i in range(12): 
+    plt.subplot(3,4,i+1); 
+    plt.plot(d.t(), d.wf(i))
+  
+  plt.show() 
+
+
+
+
+
+  
+
 
 
 
