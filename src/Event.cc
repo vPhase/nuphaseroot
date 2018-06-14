@@ -3,6 +3,8 @@
 ClassImp(nuphase::Event);
 #include "TGraph.h" 
 #include "TAxis.h" 
+#include "TBuffer.h" 
+#include "TClass.h" 
 
 
 #ifdef HAVE_LIBNUPHASE
@@ -29,20 +31,17 @@ nuphase::Event::Event(const nuphase_event * event)
     }
   }
 }
-
 #endif
-
-
 
 nuphase::Event::Event() 
 {
   event_number = 0;
   buffer_length = 0; 
+  calibrated_event_number = 0; 
   memset(board_id,0,sizeof(board_id)); 
 }
 
-
-void nuphase::Event::dumpCalibrated() 
+void nuphase::Event::dumpCalibrated() const
 {
   for (int b = 0; b < k::num_boards; b++)
   {
@@ -56,9 +55,12 @@ void nuphase::Event::dumpCalibrated()
 const double * nuphase::Event::getData(int c, board b) const 
 {
 
+  if (event_number!= calibrated_event_number) dumpCalibrated(); 
+
   //This is the calibration part 
   if (!data[b][c].size() && raw_data[b][c].size())
   {
+    calibrated_event_number = event_number; 
     data[b][c].resize(buffer_length); 
     for (int i = 0; i < buffer_length; i++) 
     {

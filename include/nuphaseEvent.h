@@ -24,7 +24,6 @@ namespace nuphase
       /** Default constructor */
       Event(); 
 
-
 #ifdef HAVE_LIBNUPHASE
       /** Constructor from raw data (requires libnuphase.so) */ 
       Event (const nuphase_event *event); 
@@ -70,10 +69,11 @@ namespace nuphase
       uint8_t board_id[k::num_boards]; 
       std::vector<UChar_t> raw_data[k::num_boards][k::num_chans_per_board]; 
       mutable std::vector<double> data[k::num_boards][k::num_chans_per_board];  //!  
-      void dumpCalibrated();  
+      void dumpCalibrated() const;   
+      mutable uint64_t calibrated_event_number; //! 
       CalibrationInfo calibration; 
 
-    ClassDef(Event,1); 
+    ClassDef(Event,2); 
 
   }; 
 } 
