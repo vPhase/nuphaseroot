@@ -74,7 +74,11 @@ install (TARGETS ${libname}
       
 if( ${ROOT_VERSION} VERSION_GREATER "5.99.99")
   install (FILES ${PROJECT_BINARY_DIR}/lib${libname}.rootmap DESTINATION ${UTIL_LIB_DIR})
-  install (FILES ${PROJECT_BINARY_DIR}/lib${libname}_rdict.pcm DESTINATION ${UTIL_LIB_DIR})
+  install ( 
+    CODE "file  ( GLOB _GENPCM \"${PROJECT_BINARY_DIR}/*.pcm\" )"
+    CODE "file ( INSTALL \${_GENPCM} DESTINATION \"${UTIL_LIB_DIR}\" )"  
+  )
+      
 endif() 
 
 
