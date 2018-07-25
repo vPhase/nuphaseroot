@@ -51,7 +51,7 @@ static int convert_impl(int nfiles, const char ** infiles, const char * outfile,
 template <class RootType, class RawType, int(*RawReadFunction)(gzFile,RawType*)>
 static int convertDir(const char * dir, const char * outfile, const char * treename)
 {
-  std::vector<std::pair<int, TString> > files; 
+  std::vector<std::string>  files; 
   std::vector<const char * > file_ptrs; 
 
 
@@ -66,13 +66,9 @@ static int convertDir(const char * dir, const char * outfile, const char * treen
   
   while ((dent = readdir(dirp)))
   {
-    std::pair<int,TString> pr; 
+    TString str; 
     pr.second.Form("%s/%s",dir,dent->d_name);
-    struct stat st; 
-    stat(pr.second.Data(), &st); 
-    pr.first = st.st_mtim.tv_sec; 
-
-    files.push_back(pr); 
+    files.push_back(std::string(str.Data()); //since I know std::sort works for strings 
   }
 
   closedir(dirp); 
@@ -80,9 +76,10 @@ static int convertDir(const char * dir, const char * outfile, const char * treen
   std::sort(files.begin(), files.end()); 
 
   file_ptrs.reserve(files.size()); 
+
   for (unsigned i = 0; i < files.size(); i++) 
   {
-    file_ptrs.push_back(files[i].second.Data()); 
+    file_ptrs.push_back(files[i].c_str()); 
   }
 
   int nprocessed = convert_impl<RootType,RawType,RawReadFunction>(file_ptrs.size(),&file_ptrs[0], outfile,treename); 
