@@ -99,7 +99,8 @@ TGraph * nuphase::Event::getGraph(int channel, board b, TGraph * g) const
 
   for (int i = 0; i < g->GetN(); i++) 
   {
-    g->GetX()[i] = i * calibration.getTimeCalibration(); 
+    double offset = calibration.getLenDelayConst() * calibration.getCableLen(b, channel); 
+    g->GetX()[i] = i * calibration.getTimeCalibration() - offset;
   }
 
   g->GetYaxis()->SetTitle(getUnitString(calibration.getVoltageUnits())); 
