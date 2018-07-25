@@ -12,7 +12,7 @@ nuphase::CalibrationInfo::CalibrationInfo()
   
   const static double temp_len[k::num_boards][k::num_chans_per_board] = {{2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 10.0},
 									{12.0, 14.0, 1.0, 10.0, 0.0, 0.0, 0.0, 0.0}};
-  std::copy(temp_len, temp_len+sizeof(temp_len)/sizeof(temp_len[0]), nuphase_fiber_length);
+  memcpy(nuphase_fiber_length, temp_len, sizeof(temp_len)); 
 
 
   for (int board = 0; board < k::num_boards; board++)
