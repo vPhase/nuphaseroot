@@ -67,8 +67,8 @@ static int convertDir(const char * dir, const char * outfile, const char * treen
   while ((dent = readdir(dirp)))
   {
     TString str; 
-    pr.second.Form("%s/%s",dir,dent->d_name);
-    files.push_back(std::string(str.Data()); //since I know std::sort works for strings 
+    str.Form("%s/%s",dir,dent->d_name);
+    files.push_back(std::string(str.Data())); //since I know std::sort works for strings 
   }
 
   closedir(dirp); 
