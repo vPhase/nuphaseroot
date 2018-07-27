@@ -287,5 +287,83 @@ int nuphase::convert::makeFilteredHeadTree(const char * filtered_event_file, con
   return 0; 
 }
 
+// convert trig_time to true time, using status file
+
+int nuphase::convert::correctHeaderFileTime(const char * infileHeader, const char * infileStatus, const char * outfile)
+{
+
+  TFile fHeader(infileHeader);
+  TTree * headTree  = (TTree*) fHeader.Get("header") ; 
+  TFile fStatus(infileStatus);
+  TTree * statusTree = (TTree*) fStatus.Get("status"); 
+
+  if (!statusTree || !headTree) return 1; 
+  headTree->BuildIndex("event_number"); 
+
+  TFile of(outfile, allow_overwrite ? "RECREATE":"CREATE"); 
+  TTree *correctedTree = new TTree("header","time corrected header files"); 
+
+  Header * hd = 0; 
+  Status * sts = 0; 
+
+  headTree->SetBranchAddress("header",&hd); 
+  statusTree->SetBranchAddress("status",&sts); 
+  correctedTree->Branch("header",&hd); 
+
+  // Line of readout_time vs. latched_pps_time results in the 
+  // function needed to do the trig_time to real time conversion
+  // slope fM has units [s / tdc]
+  // intercept fB has units [s]
+
+  double fM = 0.0;
+  double fB = 0.0;
+
+  double x_avg = 0;
+  double y_avg = 0;
+  uint64_t sentries = statusTree->GetEntriesFast();  
+  for(size_t jentry = 0; jentry < sentries; jentry++) {
+    statusTree->GetEntry(jentry);
+    x_avg += double(sts->latched_pps_time);
+    y_avg += double(sts->readout_time);
+  }
+  x_avg /= double(sentries);
+  y_avg /= double(sentries);
+
+  double sum_num = 0;
+  double sum_den = 0;
+  for(size_t jentry = 0; jentry < sentries; jentry++) {
+    statusTree->GetEntry(jentry);
+    sum_num += (double(sts->latched_pps_time) - x_avg)*(double(sts->readout_time) - y_avg);
+    sum_den += (double(sts->latched_pps_time) - x_avg)*(double(sts->latched_pps_time) - x_avg);
+  }
+
+  fM = double(sum_num) / double(sum_sden);
+  fB = double(y_avg) - fM * double (x_avg);
+
+  // With line correction done, now loop over events and convert trig time to real time
+
+  // Have to unwrap this due to a bug of 48 bit Trig time being saved into a 32 bit number
+  headTree->GetEntry(0);
+  uint32_t prev_trig_time = hd->trig_time[0];
+  uint32_t num_trig_wraps = 0;
+
+  for (int i = 0; i < headTree->GetEntries(); i++) {    
+    headTree->GetEntry(i);
+
+    if(hd->trig_time[0] < prev_trig_time) { num_trig_wraps += 1; }
+    prev_trig_time = hd->trig_time[0];
+
+    uint64_t unwrapped_trig = uint64_t(hd->trig_time[0]) | (uint64_t(num_trig_wraps) << 32);          
+
+    double corrected_time = unwrapped_trig * fM + fB;
+    hd->corrected_trigger_time = int(corrected_time);
+    hd->corrected_trigger_time_ns = int((corrected_time - int(corrected_time)) * 1e9);
+
+    of.cd(); 
+    correctedTree->Fill(); 
+  }
 
 
+  of.Write(); 
+  return 0; 
+}
