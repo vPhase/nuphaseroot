@@ -337,7 +337,7 @@ int nuphase::convert::correctHeaderFileTime(const char * infileHeader, const cha
     sum_den += (double(sts->latched_pps_time) - x_avg)*(double(sts->latched_pps_time) - x_avg);
   }
 
-  fM = double(sum_num) / double(sum_sden);
+  fM = double(sum_num) / double(sum_den);
   fB = double(y_avg) - fM * double (x_avg);
 
   // With line correction done, now loop over events and convert trig time to real time
