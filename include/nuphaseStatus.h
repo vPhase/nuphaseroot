@@ -29,9 +29,10 @@ namespace nuphase
       uint32_t readout_time_ns; //!< CPU time ns of readout
       uint32_t trigger_thresholds[k::num_beams]; //!< Trigger thresholds 
       uint64_t latched_pps_time; //!< timestamp corresponding to a pps time
-      uint8_t  board_id; //!< the board number assigned at startup 
+      uint8_t  board_id[2]; //!< the board number assigned at startup 
+      uint16_t surface_scalers[k::num_scalers]; //!< Surface scalers, if present 
 
-      ClassDef(Status,1); 
+      ClassDef(Status,2); 
   };
 }
 

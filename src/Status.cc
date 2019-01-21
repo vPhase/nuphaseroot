@@ -16,7 +16,9 @@ nuphase::Status::Status(const nuphase_status * s)
   readout_time = s->readout_time; 
   readout_time_ns = s->readout_time_ns; 
   latched_pps_time = s->latched_pps_time; 
-  board_id = s->board_id; 
+  board_id[0] = s->board_id[0]; 
+  board_id[1] = s->board_id[1]; 
+  memcpy(surface_scalers, s->surface_scalers, sizeof(surface_scalers)); 
 }
 
 #endif
@@ -31,7 +33,9 @@ nuphase::Status::Status()
   readout_time = 0;
   readout_time_ns = 0;
   latched_pps_time = 0;
-  board_id = 0;
+  board_id[0] =0;
+  board_id[1] =0;
+  memset(surface_scalers,0,sizeof(surface_scalers)); 
 }
 
 
