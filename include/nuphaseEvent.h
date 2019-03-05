@@ -60,6 +60,7 @@ namespace nuphase
       uint16_t getBufferLength() const { return buffer_length; } 
 
       uint64_t getEventNumber() const { return event_number; } 
+      bool isSurface() const { return !board_id[0] && board_id[1]; } 
 
     private: 
       /** The event number */ 

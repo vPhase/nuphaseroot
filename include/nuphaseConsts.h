@@ -22,7 +22,8 @@ namespace nuphase
     TRIGGER_NONE = 0, 
     TRIGGER_RF = 1, 
     TRIGGER_SW = 2, 
-    TRIGGER_EXT = 4 
+    TRIGGER_EXT = 3,
+    TRIGGER_SURFACE = 4 
   } ;
 
   enum sync_problem

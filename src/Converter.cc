@@ -259,7 +259,7 @@ int nuphase::convert::makeFilteredHeadTree(const char * filtered_event_file, con
   TTree * headTree = (TTree*) fhf.Get("header"); 
 
   if (!eventTree || !headTree) return 1; 
-  headTree->BuildIndex("event_number"); 
+  headTree->BuildIndex("event_number","trigger_type==4"); 
 
 
 
@@ -276,8 +276,9 @@ int nuphase::convert::makeFilteredHeadTree(const char * filtered_event_file, con
   for (int i = 0; i < eventTree->GetEntries(); i++) 
   {
     eventTree->GetEntry(i); 
-    headTree->GetEntry(ev->getEventNumber() % 1000000000-1); 
-//    printf("%lld %lld\n", ev->getEventNumber(), hd->event_number); 
+    Long64_t entry = headTree->GetEntryNumberWithBestIndex(ev->getEventNumber(), ev->isSurface()); 
+    headTree->GetEntry(entry); 
+//    printf("%lld %lld %lld %d %d\n", ev->getEventNumber(), hd->event_number, entry, ev->isSurface(), hd->trigger_type); 
     of.cd(); 
     filteredTree->Fill(); 
   }
