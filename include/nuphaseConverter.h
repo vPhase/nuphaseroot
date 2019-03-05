@@ -35,6 +35,9 @@ namespace nuphase
   /** Convert a single Header file into a ROOT file */ 
   inline int convertHeaderFile(const char * infile, const char * outfile) {return  convertHeaderFiles(1,&infile,outfile); } 
 
+  /** Correct Trig_time in a single Header ROOT file */
+  int correctHeaderFileTime(const char * infileHeader, const char * infileStatus, const char * outfile);
+
   /** Convert a set of Status files to a ROOT tree */ 
   int convertStatusFiles(int nfiles, const char ** infiles, const char * outfile); 
 
