@@ -10,6 +10,7 @@
 #   d.wf(0) # get a numpy array of channel 0 
 
 
+from __future__ import division, print_function
 
 import ROOT
 import numpy 
@@ -56,19 +57,19 @@ class Reader:
     self.event_tree = self.event_file.Get("event") 
     self.evt = ROOT.nuphase.Event() 
     self.event_entry = -1; 
-    self.event_tree.SetBranchAddress("event",self.evt) 
+    self.event_tree.SetBranchAddress("event",ROOT.AddressOf(self.evt))
 
     self.head_file = ROOT.TFile("%s/run%d/header.root" % (base_dir, run))
     self.head_tree = self.head_file.Get("header") 
     self.head = ROOT.nuphase.Header(); 
     self.head_entry = -1
-    self.head_tree.SetBranchAddress("header",self.head) 
+    self.head_tree.SetBranchAddress("header",ROOT.AddressOf(self.head))
     self.head_tree.BuildIndex("header.event_number") 
 
     self.status_file = ROOT.TFile("%s/run%d/status.root" % (base_dir, run))
     self.status_tree = self.status_file.Get("status") 
     self.stat= ROOT.nuphase.Status(); 
-    self.status_tree.SetBranchAddress("status",self.stat) 
+    self.status_tree.SetBranchAddress("status",ROOT.AddressOf(self.stat)) 
     self.status_tree.BuildIndex("status.readout_time","status.readout_time_ns"); 
     self.status_entry =-1; 
 
@@ -93,7 +94,7 @@ class Reader:
 
   def wf(self,ch = 0):  
     ## stupid hack because for some reason it doesn't always report the right buffer length 
-    g = self.event().getGraph(ch % 8, ch/8) 
+    g = self.event().getGraph(ch % 8, ch//8) 
     return numpy.frombuffer(g.GetY(), numpy.dtype('float64'), self.event().getBufferLength()) - 64 
     g = None #try to forget 
 
@@ -125,7 +126,7 @@ if __name__=="__main__":
   import matplotlib.pyplot as plt
 
 # If your data is elsewhere, pass it as an argument
-  datapath = sys.arvg[1] if len(sys.argv) > 1 else "/data/nuphase/root"
+  datapath = sys.arvg[1] if len(sys.argv) > 1 else "/project2/avieregg/nuphase/telem/root"
 
 # look at run 360
   d = Reader(datapath,360) 
@@ -135,7 +136,7 @@ if __name__=="__main__":
 ## dump the headers and status, just to show they're there
   d.header().Dump(); 
   d.status().Dump(); 
-  print d.N() 
+  print(d.N())
 
 # plot all waveforms
   for i in range(12): 
