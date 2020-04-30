@@ -9,6 +9,7 @@
 #pragma link C++ namespace nuphase::convert+; 
 
 #pragma link C++ class nuphase::Event+;
+#pragma link C++ class nuphase::SimEvent+;
 #pragma link C++ class nuphase::Header+;
 #pragma link C++ class nuphase::Status+;
 #pragma link C++ class nuphase::Hk+;

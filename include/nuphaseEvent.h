@@ -24,6 +24,8 @@ namespace nuphase
       /** Default constructor */
       Event(); 
 
+
+
 #ifdef HAVE_LIBNUPHASE
       /** Constructor from raw data (requires libnuphase.so) */ 
       Event (const nuphase_event *event); 
@@ -62,7 +64,7 @@ namespace nuphase
       uint64_t getEventNumber() const { return event_number; } 
       bool isSurface() const { return !board_id[0] && board_id[1]; } 
 
-    private: 
+    protected: 
       /** The event number */ 
       uint64_t event_number; 
       /** The buffer length */
@@ -74,7 +76,7 @@ namespace nuphase
       mutable uint64_t calibrated_event_number; //! 
       CalibrationInfo calibration; 
 
-    ClassDef(Event,2); 
+    ClassDef(Event,3); 
 
   }; 
 } 

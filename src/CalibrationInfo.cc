@@ -25,3 +25,24 @@ nuphase::CalibrationInfo::CalibrationInfo()
 
   v = UNITS_ADC; 
 }
+
+nuphase::CalibrationInfo::CalibrationInfo(double tc, double vc) 
+{
+  time_calibration = tc; 
+  t = UNITS_NS; 
+
+  memset(nuphase_fiber_length,0,sizeof(nuphase_fiber_length)); 
+  nuphase_fiber_delay = 0; 
+  for (int board = 0; board < k::num_boards; board++)
+  {
+    for (int chan = 0; chan < k::num_chans_per_board; chan++)
+    {
+      voltage_calibration[board][chan] = v; 
+    }
+  }
+
+  v = UNITS_MV; 
+
+}
+
+

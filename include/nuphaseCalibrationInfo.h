@@ -17,6 +17,9 @@ namespace nuphase
       /* Construct the default CalibrationInfo */ 
       CalibrationInfo(); 
 
+      //For Simulation
+      CalibrationInfo(double time_calibration, double voltage_calibration); 
+
       double getVoltageCalibration(board b, int chan) const { return voltage_calibration[b][chan]; } 
       double getTimeCalibration() const { return time_calibration; } 
       double getLenDelayConst() const { return nuphase_fiber_delay; } 
@@ -25,7 +28,7 @@ namespace nuphase
       units getTimeUnits()const  { return t; }
       units getVoltageUnits()const  { return v; }
 
-    private: 
+    protected: 
       double time_calibration; 
       double voltage_calibration[k::num_boards][k::num_chans_per_board]; 
       units t; 
@@ -36,6 +39,7 @@ namespace nuphase
 
       ClassDef(CalibrationInfo,2); 
   }; 
+
 
 }
 
