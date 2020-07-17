@@ -37,6 +37,7 @@ namespace nuphase
       /** Returns true if the given beam triggered */ 
       bool beamTriggered(uint8_t beam) const  { return (1 <<beam) & triggered_beams; } 
 
+      bool isGated() const { return gate_flag &0x1; } 
 
       /** The data members (mostly the same as the struct in libnuphase) */ 
       uint64_t event_number; 
