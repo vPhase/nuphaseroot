@@ -14,6 +14,9 @@ nuphase::Dataset::Dataset(int run, const char * basedir)
   the_event = 0; 
   the_header = 0;
 
+  event_file = 0; 
+  header_file = 0; 
+  status_file = 0; 
   
   status_tree = 0; 
   header_tree = 0; 
