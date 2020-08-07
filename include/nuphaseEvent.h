@@ -61,6 +61,7 @@ namespace nuphase
 
       uint64_t getEventNumber() const { return event_number; } 
       bool isSurface() const { return !board_id[0] && board_id[1]; } 
+      double getT0(int channel, board b = BOARD_MASTER) const; 
 
     private: 
       /** The event number */ 
