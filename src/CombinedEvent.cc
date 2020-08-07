@@ -33,6 +33,7 @@ const nuphase::CombinedEvent::Opts & nuphase::CombinedEvent::Opts::defaultOpts()
 static std::map<int,std::string> a5_map; 
 
 
+
 static TFile * openAraEventFile(int run, std::string a5dir) 
 {
   if (a5dir == "") a5dir = getenv("ARA5_ROOT_DATA"); 
@@ -40,24 +41,28 @@ static TFile * openAraEventFile(int run, std::string a5dir)
   TString str; 
   if(!a5_map.size()) 
   {
-    str.Form("%s/nuphaseroot/a5.map", getenv("NUPHASE_UTIL_INSTALL_DIR")); 
+    str.Form("%s/share/nuphaseroot/a5.map", getenv("NUPHASE_INSTALL_DIR")); 
+
+
+//    printf("%s\n", str.Data()); 
     std::ifstream map(str.Data()); 
 
     int run;
     std::string path; 
-    while (map >> run >> path)
+    while ((map >> run >> path))
     {
       a5_map[run] = path; 
+//      printf("%d %s\n", run, path.c_str()); 
     }
   }
 
   if (!a5_map.count(run)) 
   {
-    fprintf(stderr,"Count not run %d in map :(\n", run); 
+    fprintf(stderr,"Count not find run %d in map :(\n", run); 
     return 0; 
   }
 
-  str.Form("%s/%s", a5dir.c_str(), a5_map[run].c_str()); 
+  str.Form("%s/%s/event%06d.root", a5dir.c_str(), a5_map[run].c_str(), run); 
 
   return TFile::Open(str.Data()); 
 }
@@ -99,19 +104,19 @@ nuphase::CombinedEvent::makeCombinedEvent(int nuphase_run, int nuphase_index,
     if (!a5file) return 0; 
 
     a5tree = (TTree*) a5file->Get("eventTree"); 
-    a5tree->SetBranchAddress("event", a5event); 
+    a5tree->SetBranchAddress("event", &a5event); 
 
 
     //set the pedestal file, if we can 
 
     TString pedbase = opts.a5_pedestal_dir; 
-    if (pedbase=="") pedbase = getenv("ARA5_PEDESTAL_DATA"); 
+    if (pedbase=="") pedbase = getenv("ARA5_PEDESTAL_DIR"); 
     TString pedfile;
-    pedfile.Form("%s/ped_%d.dat", pedbase.Data(), a5_run); 
+    pedfile.Form("%s/pedFile_%d.dat", pedbase.Data(), a5_run); 
 
     if (gSystem->AccessPathName(pedfile.Data(),kReadPermission))
     {
-      fprintf(stderr,"Could not find pedestal file for run %d in %s. Maybe run repeder to generate it?\n", a5_run, pedbase.Data()); 
+      fprintf(stderr,"Could not find pedestal file for run %d (looked for %s). Maybe run repeder to generate it?\n", a5_run, pedfile.Data()); 
 
     }
     else
@@ -155,15 +160,18 @@ nuphase::CombinedEvent::CombinedEvent(const Header * nuphase_header, const Event
 
   //let's fill in the phased array antennas first 
 
-  nuphase_run = nuphase_header->event_number / 10000000000; ; 
-  nuphase_entry = (nuphase_header->event_number % 1000000000)-1; 
+  nuphase_run = nuphase_header->event_number / 1000000000; ; 
+  nuphase_entry = (nuphase_header->event_number % 100000000)-1; 
 
+  TString str; 
   for (int bd = 0; bd< 2; bd++) 
   {
     for (int ch = 0; ch < 8; ch++) 
-    {
-      if (const double * the_data = nuphase_event->getData(ch,(nuphase::board) bd)) 
+    { 
+      const uint8_t * the_raw_data = nuphase_event->getRawData(ch,(nuphase::board) bd); 
+      if (the_raw_data) 
       {
+        const double * the_data = nuphase_event->getData(ch,(nuphase::board) bd); 
 
         types.push_back( bd == 0 ? NUPHASE_VPOL : 
                         nuphase_event->isSurface() || ch > 1 ? SURFACE :
@@ -174,7 +182,10 @@ nuphase::CombinedEvent::CombinedEvent(const Header * nuphase_header, const Event
         t0s.push_back(nuphase_event->getT0(ch,(nuphase::board) bd)); 
         sample_rate.push_back(1.5); //TODO: resample
         antenna_positions.push_back(TVector3(0,0,0)); //TODO: fix
-        channel_names.push_back(""); //TODO, come up with a name
+
+        str.Form("NUPHASE, BD %s, CH %d", bd==0?"MASTER":"SLAVE", ch); 
+
+        channel_names.push_back(str.Data()); //TODO, come up with a better name
       }
     }
   }
@@ -183,9 +194,11 @@ nuphase::CombinedEvent::CombinedEvent(const Header * nuphase_header, const Event
   //now do the ARA channels 
   ara_event_id = ara_event->eventId; 
 
-  for (int rfchan = 0; rfchan < ((UsefulAtriStationEvent*) ara_event)->getNumRFChannels(); rfchan++)
+
+
+  for (int chan = 0; chan < ((UsefulAtriStationEvent*) ara_event)->getNumRFChannels(); chan++)
   {
-    TGraph * g = ((UsefulAtriStationEvent*) ara_event)->getGraphFromRFChan(rfchan); 
+    TGraph * g = ((UsefulAtriStationEvent*) ara_event)->getGraphFromRFChan(chan); 
 
     //this needs to be interpoolated. TODO: allow choice of interpolator. 
     TGraph * gint = FFTtools::getInterpolatedGraph(g, 1./opts.sample_rate); 
@@ -195,7 +208,8 @@ nuphase::CombinedEvent::CombinedEvent(const Header * nuphase_header, const Event
     antenna_positions.push_back(TVector3(0,0,0)); //TODO
     sample_rate.push_back(3); 
     t0s.push_back(gint->GetX()[0]); 
-
+    str.Form("A5 CH%d", chan); 
+    channel_names.push_back(str.Data()); //TODO, come up with a better name
 
 
     delete g; 

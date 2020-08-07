@@ -30,7 +30,7 @@ namespace nuphase
         //Used by factory method, but usually will get from environment! 
         const char * nuphase_prefix = ""; // get from environment, NUPHASE_ROOT_DATA
         const char * a5_prefix = ""; // get from environment, ARA5_ROOT_DATA 
-        const char * a5_pedestal_dir = ""; // get from environment, ARA5_PEDESTAL_DATA; 
+        const char * a5_pedestal_dir = ""; // get from environment, ARA5_PEDESTAL_DIR. NOTE THAT THIS MUST BE LOCAL FOR NOW, WILL EVENTUALLY ALLOW HTTP; 
 
 
         // will set time delays based on cross-correlation of these channels if they're both non-negative. TODO. 
