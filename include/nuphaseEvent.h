@@ -73,9 +73,9 @@ namespace nuphase
       mutable std::vector<double> data[k::num_boards][k::num_chans_per_board];  //!  
       void dumpCalibrated() const;   
       mutable uint64_t calibrated_event_number; //! 
-      CalibrationInfo calibration; 
+      CalibrationInfo calibration; //! 
 
-    ClassDef(Event,2); 
+    ClassDef(Event,3); 
 
   }; 
 } 
