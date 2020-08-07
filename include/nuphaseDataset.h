@@ -5,6 +5,8 @@
 
 
 class TTree; 
+class TChain; 
+class TFile; 
 
 namespace nuphase
 {
@@ -17,42 +19,53 @@ namespace nuphase
   {
 
     public: 
-      Dataset(int run =-1, int detector = 1); 
-
-      /** Loads a particular run */ 
-      int loadRun(int run, int detector = 1); 
-
-      /* Gets an event. Will load a new run if necessary*/ 
-      int getEvent(int event, int detector = 1); 
+      Dataset(int run, const char * basedir = ""); 
+      int loadRun(int run, const char * basedir = ""); 
+      int getRun() { return current_run; } 
 
       /** Grabs an entry within a run */ 
-      int getEntry(int entry); 
+      int setEntry(int entry); 
 
       Status * status(bool force_reload = false); 
       Header * header(bool force_reload = false); 
       Event  * event(bool force_reload = false); 
 
-      TTree * statusTree(); 
-      TTree * headerTree(); 
-      TTree * eventTree(); 
+      TTree * statusTree() { return status_tree; }
+      TTree * headerTree() { return header_tree; }
+      TTree * eventTree()  { return  event_tree; }
 
+      /** Returns the housekeeping data for current time */ 
+      Hk * hk(bool force_reload = false); 
 
-      /** Returns the housekeeping data for a given time. If 0 is passed, the time of the current event (if any) is used.*/ 
-      Hk * hk(double when = 0, bool force_reload = false); 
+      static TTree * hkTree(const char * base_dir = ""); 
+
+      /** Returns the housekeeping data for a given time. */
+      static Hk * hk(double when, bool force_reload = false, const char * base_dir = ""); 
 
 
 
     private: 
       int current_run; 
-      int current_det; 
-      int current_event_index; 
 
+      const char * data_dir; 
+      int event_index; 
+      int header_index; 
+      int status_index; 
+      int wanted_index; 
+
+      TFile * event_file;
+      TFile * header_file;
+      TFile * status_file;
 
       Status * the_status; 
       Event * the_event; 
       Header * the_header; 
 
-      Hk * the_hk; 
+      TTree * status_tree; 
+      TTree * event_tree;; 
+      TTree * header_tree; 
+
+
   };
 
 }

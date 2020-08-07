@@ -13,5 +13,9 @@
 #pragma link C++ class nuphase::Status+;
 #pragma link C++ class nuphase::Hk+;
 #pragma link C++ class nuphase::CalibrationInfo+;
+#pragma link C++ class nuphase::Dataset; 
+
+
+
 
 
