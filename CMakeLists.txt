@@ -72,6 +72,7 @@ install (TARGETS ${libname}
 	LIBRARY DESTINATION ${UTIL_LIB_DIR}
 	RUNTIME DESTINATION ${UTIL_BIN_DIR})
       
+install (DIRECTORY data/ DESTINATION ${UTIL_SHARE_DIR}/nuphaseroot)
 if( ${ROOT_VERSION} VERSION_GREATER "5.99.99")
   install (FILES ${PROJECT_BINARY_DIR}/lib${libname}.rootmap DESTINATION ${UTIL_LIB_DIR})
   install ( 
@@ -116,20 +117,31 @@ set( CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin )
 
 
 option (LIBNUPHASE_SUPPORT "Support for reading / converting from raw files." OFF) 
-set (LIBNUPHASE_PATH  "" CACHE String "Additional path  to search for libnuphase (only necessary if not in NUPHASE_INSTALL_DIR)" ) 
+set (LIBNUPHASE_PATH  "" CACHE STRING "Additional path  to search for libnuphase (only necessary if not in NUPHASE_INSTALL_DIR)" ) 
 set (EXTRA_LIBS "") 
+
+option (ARAROOT_SUPPORT " Support for AraRoot (required for combined events") 
+
 
 if (LIBNUPHASE_SUPPORT) 
   add_definitions( -DHAVE_LIBNUPHASE )
-  find_library(NUPHASE_LIB nuphase PATHS ${LIBNUPHASE_PATH})
+  find_library(NUPHASE_LIB nuphase PATHS ${LIBNUPHASE_PATH} $ENV{NUPHASE_INSTALL_DIR}/lib)
   find_package(ZLIB REQUIRED)
   if (LIBNUPHASE_PATH STREQUAL "") 
     message ("Assuming libnuphase is in NUPHASE_INSTALL_DIR") 
+    include_directories($ENV{NUPHASE_INSTALL_DIR}/include) 
   else()
     include_directories(${LIBNUPHASE_PATH}) 
-    target_link_libraries(${libname} ${NUPHASE_LIB} ${ZLIB_LIBRARIES}) 
   endif()
+  target_link_libraries(${libname} ${NUPHASE_LIB} ${ZLIB_LIBRARIES}) 
 endif(LIBNUPHASE_SUPPORT) 
+
+
+if (ARAROOT_SUPPORT) 
+  add_definitions( -DHAVE_ARAROOT) 
+  find_library(ARAEVENT_LIB AraEvent PATHS $ENV{ARA_UTIL_INSTALL_DIR}/lib REQUIRED) 
+  target_link_libraries(${libname} ${ARAEVENT_LIB}) 
+endif(ARAROOT_SUPPORT)
 
 
 set (BINSRCDIR programs) 
