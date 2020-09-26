@@ -13,6 +13,8 @@ class TGraph;
 struct nuphase_header; 
 #endif
 
+
+
 namespace nuphase
 {
 
@@ -38,6 +40,17 @@ namespace nuphase
       bool beamTriggered(uint8_t beam) const  { return (1 <<beam) & triggered_beams; } 
 
       bool isGated() const { return gate_flag &0x1; } 
+
+      //getters (for pyroot access of non-scalar members :( ) 
+      uint32_t getReadoutTime(board which = BOARD_MASTER)  const{ return readout_time[which]; } 
+      uint32_t getReadoutTimeNs(board which = BOARD_MASTER) const { return readout_time_ns[which]; } 
+      double  getReadoutTimeFloat(board which= BOARD_MASTER) const { return readout_time[which] + 1e-9 * readout_time_ns[which]; } 
+      uint64_t getTrigTime(board which = BOARD_MASTER) const { return trig_time[which]; } 
+      uint32_t getBeamPower(int beam) const  { return beam_power[beam]; } 
+      uint32_t getChannelReadMask(board which = BOARD_MASTER)  const { return channel_read_mask[which]; } 
+      uint8_t getBoardID(board which = BOARD_MASTER) const { return board_id[which]; }
+      bool isRFTrigger() const { return trigger_type == TRIGGER_RF ; } 
+      bool isSurfaceTrigger() const { return trigger_type == TRIGGER_SURFACE ; } 
 
       /** The data members (mostly the same as the struct in libnuphase) */ 
       uint64_t event_number; 
@@ -66,6 +79,7 @@ namespace nuphase
 
       uint32_t corrected_trigger_time;             //!< The offline corrected triggertime
       uint32_t corrected_trigger_time_ns;           //!< The offline corrected trigger time (ns) 
+      virtual ~Header() {;} 
 
     ClassDef(Header,1); 
   }; 
