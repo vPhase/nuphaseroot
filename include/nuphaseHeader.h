@@ -47,7 +47,7 @@ namespace nuphase
       double  getReadoutTimeFloat(board which= BOARD_MASTER) const { return readout_time[which] + 1e-9 * readout_time_ns[which]; } 
       uint64_t getTrigTime(board which = BOARD_MASTER) const { return trig_time[which]; } 
       uint32_t getBeamPower(int beam) const  { return beam_power[beam]; } 
-      uint32_t getChannelReadMask(board which = BOARD_MASTER)  const { return channel_read_mask[which]; } 
+      uint8_t getChannelReadMask(board which = BOARD_MASTER)  const { return channel_read_mask[which]; } 
       uint8_t getBoardID(board which = BOARD_MASTER) const { return board_id[which]; }
       bool isRFTrigger() const { return trigger_type == TRIGGER_RF ; } 
       bool isSurfaceTrigger() const { return trigger_type == TRIGGER_SURFACE ; } 
