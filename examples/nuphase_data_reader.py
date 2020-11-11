@@ -16,8 +16,6 @@ import ROOT
 import numpy 
 import sys
 import os 
-
-
 ## You need to load the libnuphaseroot library
 ## For the following line to work, the shared library must be in 
 ## your dynamic loader path (LD_LIBRARY_PATH or DYLD_LIBRARY_PATH, accordingly) 
@@ -58,21 +56,19 @@ class Reader:
 
     self.event_file = ROOT.TFile.Open("%s/run%d/event.root" % (base_dir, run))
     self.event_tree = self.event_file.Get("event") 
-    self.evt = ROOT.nuphase.Event() 
+    self.event_tree.BuildIndex("event.event_number")
+    self.evt = None
     self.event_entry = -1; 
-    self.event_tree.SetBranchAddress("event",ROOT.AddressOf(self.evt))
 
-    self.head_file = ROOT.TFile.Open("%s/run%d/header.root" % (base_dir, run))
+    self.head_file = ROOT.TFile.Open("%s/run%d/header.filtered.root" % (base_dir, run))
     self.head_tree = self.head_file.Get("header") 
-    self.head = ROOT.nuphase.Header(); 
+    self.head = None
     self.head_entry = -1
-    self.head_tree.SetBranchAddress("header",ROOT.AddressOf(self.head))
     self.head_tree.BuildIndex("header.event_number") 
 
     self.status_file = ROOT.TFile.Open("%s/run%d/status.root" % (base_dir, run))
     self.status_tree = self.status_file.Get("status") 
-    self.stat= ROOT.nuphase.Status(); 
-    self.status_tree.SetBranchAddress("status",ROOT.AddressOf(self.stat)) 
+    self.stat= None
     self.status_tree.BuildIndex("status.readout_time","status.readout_time_ns"); 
     self.status_entry =-1; 
 
@@ -90,8 +86,11 @@ class Reader:
 
   def event(self,force_reload = False): 
     if (self.event_entry != self.current_entry or force_reload):
-      self.event_tree.GetEntry(self.current_entry)
+      ev_number = self.header(force_reload).event_number
+      i = self.event_tree.GetEntryNumberWithIndex(ev_number,0)
+      self.event_tree.GetEntry(i) 
       self.event_entry = self.current_entry 
+      self.evt = self.event_tree.event
     return self.evt 
 
 
@@ -111,12 +110,14 @@ class Reader:
     if (self.head_entry != self.current_entry or force_reload): 
       self.head_tree.GetEntry(self.current_entry); 
       self.head_entry = self.current_entry 
+      self.head = self.head_tree.header
     return self.head 
 
   def status(self,force_reload = False): 
     if (self.status_entry != self.current_entry or force_reload): 
       self.status_tree.GetEntry(self.status_tree.GetEntryNumberWithBestIndex(self.header().getReadoutTime(), self.header().getReadoutTimeNs()))
       self.status_entry = self.current_entry
+      self.stat = self.status_tree.status
 
     return self.stat
 
@@ -135,9 +136,9 @@ if __name__=="__main__":
   datapath = sys.argv[1] if len(sys.argv) > 1 else os.environ["NUPHASE_ROOT_DATA"]
 
 # look at run 360
-  d = Reader(datapath,360) 
+  d = Reader(5562, datapath) 
 # this is a SPIceCore event
-  d.setEntry(65079) 
+  d.setEntry(0) 
 
 ## dump the headers and status, just to show they're there
   d.header().Dump(); 
@@ -145,8 +146,8 @@ if __name__=="__main__":
   print(d.N())
 
 # plot all waveforms
-  for i in range(12): 
-    plt.subplot(3,4,i+1); 
+  for i in range(16): 
+    plt.subplot(4,4,i+1); 
     plt.plot(d.t(), d.wf(i))
   
   plt.show() 
