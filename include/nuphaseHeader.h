@@ -51,6 +51,7 @@ namespace nuphase
       uint8_t getBoardID(board which = BOARD_MASTER) const { return board_id[which]; }
       bool isRFTrigger() const { return trigger_type == TRIGGER_RF ; } 
       bool isSurfaceTrigger() const { return trigger_type == TRIGGER_SURFACE ; } 
+      uint64_t getEventNumber() const { return event_number ; } 
 
       /** The data members (mostly the same as the struct in libnuphase) */ 
       uint64_t event_number; 
