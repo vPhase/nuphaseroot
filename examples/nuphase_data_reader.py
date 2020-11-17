@@ -57,9 +57,16 @@ class Reader:
     self.event_file = ROOT.TFile.Open("%s/run%d/event.root" % (base_dir, run))
     self.event_tree = self.event_file.Get("event") 
 
-    event_N = self.event_tree.Draw("Entry$:10*(event.event_number % 1000000) + event.board_id[0]","","goff") # this helps with surface triggers, I think
-    self.event_entries = numpy.copy(numpy.frombuffer(self.event_tree.GetV1(), numpy.dtype('float64'), event_N)) 
-    self.hashed_event_numbers = numpy.copy(numpy.frombuffer(self.event_tree.GetV2(), numpy.dtype('float64'), event_N)) 
+    event_N = self.event_tree.Draw("Entry$:10*int(event.event_number % 1000000000) + event.board_id[0]","","goff") # this helps with surface triggers, I think
+
+    unsorted_event_entries = numpy.copy(numpy.frombuffer(self.event_tree.GetV1(), numpy.dtype('float64'), event_N)) 
+    unsorted_hashed_event_numbers = numpy.copy(numpy.frombuffer(self.event_tree.GetV2(), numpy.dtype('float64'), event_N)) 
+
+
+    # make sure the index is sorted
+    sorted_indices = numpy.argsort(unsorted_hashed_event_numbers)
+    self.event_entries = unsorted_event_entries[sorted_indices]
+    self.hashed_event_numbers = unsorted_hashed_event_numbers[sorted_indices]
 
     self.event_tree.BuildIndex("event.event_number")
     self.event_entry = -1; 
@@ -88,12 +95,13 @@ class Reader:
 
   def event(self,force_reload = False): 
     if (self.event_entry != self.current_entry or force_reload):
-      hashed_ev_number = 10*(self.header(force_reload).getEventNumber() % 1000000 ) + self.header().getBoardID(); 
+      hashed_ev_number = 10*(self.header(force_reload).getEventNumber() % 1000000000 )
+      hashed_ev_number+=self.header().getBoardID(); 
       i_entry = numpy.searchsorted(self.hashed_event_numbers,hashed_ev_number) 
       i = int(self.event_entries[i_entry])
-      self.event_tree.GetEntry(int(i)) 
+      self.event_tree.GetEntry(i) 
       self.event_entry = self.current_entry 
-      assert(self.event_tree.event.getEventNumber() == self.header().getEventNumber())
+      assert(self.event_tree.event.getEventNumber() == self.header().getEventNumber()) , str(self.event_tree.event.getEventNumber()) + " (event) does not equal " + str(self.header().getEventNumber()) + " (header)"
     return self.event_tree.event
 
 
