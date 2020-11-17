@@ -56,27 +56,29 @@ class Reader:
 
     self.event_file = ROOT.TFile.Open("%s/run%d/event.root" % (base_dir, run))
     self.event_tree = self.event_file.Get("event") 
+
+    event_N = self.event_tree.Draw("Entry$:10*(event.event_number % 1000000) + event.board_id[0]","","goff") # this helps with surface triggers, I think
+    self.event_entries = numpy.copy(numpy.frombuffer(self.event_tree.GetV1(), numpy.dtype('float64'), event_N)) 
+    self.hashed_event_numbers = numpy.copy(numpy.frombuffer(self.event_tree.GetV2(), numpy.dtype('float64'), event_N)) 
+
     self.event_tree.BuildIndex("event.event_number")
-    self.evt = None
     self.event_entry = -1; 
 
     self.head_file = ROOT.TFile.Open("%s/run%d/header.filtered.root" % (base_dir, run))
     self.head_tree = self.head_file.Get("header") 
-    self.head = None
     self.head_entry = -1
     self.head_tree.BuildIndex("header.event_number") 
 
     self.status_file = ROOT.TFile.Open("%s/run%d/status.root" % (base_dir, run))
     self.status_tree = self.status_file.Get("status") 
-    self.stat= None
-    self.status_tree.BuildIndex("status.readout_time","status.readout_time_ns"); 
+    self.status_tree.BuildIndex("status.readout_time","status.readout_time_ns") 
     self.status_entry =-1; 
 
     self.current_entry = 0; 
     
   def setEntry(self,i): 
     if (i < 0 or i >= self.head_tree.GetEntries()):
-      sys.stderr.write("Entry out of bounds!") 
+      sys.stderr.write("Entry out of bounds!\n") 
     else: 
       self.current_entry = i; 
 
@@ -86,22 +88,24 @@ class Reader:
 
   def event(self,force_reload = False): 
     if (self.event_entry != self.current_entry or force_reload):
-      ev_number = self.header(force_reload).event_number
-      i = self.event_tree.GetEntryNumberWithIndex(ev_number,0)
-      self.event_tree.GetEntry(i) 
+      hashed_ev_number = 10*(self.header(force_reload).getEventNumber() % 1000000 ) + self.header().getBoardID(); 
+      i_entry = numpy.searchsorted(self.hashed_event_numbers,hashed_ev_number) 
+      i = int(self.event_entries[i_entry])
+      self.event_tree.GetEntry(int(i)) 
       self.event_entry = self.current_entry 
-      self.evt = self.event_tree.event
-    return self.evt 
+      assert(self.event_tree.event.getEventNumber() == self.header().getEventNumber())
+    return self.event_tree.event
 
 
-  def wf(self,ch = 0):  
+  def wf(self,ch = 0, force = False):  
 
+    ev = self.event() 
     bd = ROOT.nuphase.BOARD_MASTER;
     if (ch > 8) :
         ch-=8
         bd = ROOT.nuphase.BOARD_SLAVE
     ## stupid hack because for some reason it doesn't always report the right buffer length 
-    return numpy.frombuffer(self.event().getData(ch,bd), numpy.dtype('float64'), self.event().getBufferLength()) - 64 
+    return numpy.frombuffer(ev.getData(ch,bd), numpy.dtype('float64'), ev.getBufferLength()) - 64 
 
   def t(self):
     return numpy.linspace(0, self.event().getBufferLength() /1.5, self.event().getBufferLength()) 
@@ -110,16 +114,14 @@ class Reader:
     if (self.head_entry != self.current_entry or force_reload): 
       self.head_tree.GetEntry(self.current_entry); 
       self.head_entry = self.current_entry 
-      self.head = self.head_tree.header
-    return self.head 
+    return self.head_tree.header
 
   def status(self,force_reload = False): 
     if (self.status_entry != self.current_entry or force_reload): 
       self.status_tree.GetEntry(self.status_tree.GetEntryNumberWithBestIndex(self.header().getReadoutTime(), self.header().getReadoutTimeNs()))
       self.status_entry = self.current_entry
-      self.stat = self.status_tree.status
 
-    return self.stat
+    return self.status_tree.status
 
 
   def N(self): 
