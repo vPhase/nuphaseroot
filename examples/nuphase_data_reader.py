@@ -74,7 +74,7 @@ class Reader:
     self.head_file = ROOT.TFile.Open("%s/run%d/header.filtered.root" % (base_dir, run))
     self.head_tree = self.head_file.Get("header") 
     self.head_entry = -1
-    self.head_tree.BuildIndex("header.event_number") 
+    self.head_tree.BuildIndex("header.event_number % 1000000000", "header.board_id[0]==0") 
 
     self.status_file = ROOT.TFile.Open("%s/run%d/status.root" % (base_dir, run))
     self.status_tree = self.status_file.Get("status") 
@@ -89,9 +89,11 @@ class Reader:
     else: 
       self.current_entry = i; 
 
-  def setEvent(self,i):
-    setEntry(self.head_tree.GetEntryNumberWithIndex(i)) 
+  def setEvent(self,i, surface=0):
+    self.setEntry(self.head_tree.GetEntryNumberWithIndex(i % 1000000000, 1 if surface else 0)) 
 
+  def setDeepEntry(self,i):
+    self.setEvent(i+1) 
 
   def event(self,force_reload = False): 
     if (self.event_entry != self.current_entry or force_reload):
