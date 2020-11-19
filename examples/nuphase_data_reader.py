@@ -47,7 +47,7 @@ ROOT.gSystem.Load("libnuphaseroot.so");
 
 class Reader:
 
-  def __init__(self, run, base_dir=None):
+  def __init__(self, run, base_dir=None, header_type="filtered"):
     
     if base_dir == None: 
         base_dir = os.environ["NUPHASE_ROOT_DATA"] 
@@ -59,9 +59,8 @@ class Reader:
 
     event_N = self.event_tree.Draw("Entry$:10*int(event.event_number % 1000000000) + event.board_id[0]","","goff") # this helps with surface triggers, I think
 
-    unsorted_event_entries = numpy.copy(numpy.frombuffer(self.event_tree.GetV1(), numpy.dtype('float64'), event_N)) 
-    unsorted_hashed_event_numbers = numpy.copy(numpy.frombuffer(self.event_tree.GetV2(), numpy.dtype('float64'), event_N)) 
-
+    unsorted_event_entries = numpy.frombuffer(self.event_tree.GetV1(), numpy.dtype('float64'), event_N) 
+    unsorted_hashed_event_numbers = numpy.frombuffer(self.event_tree.GetV2(), numpy.dtype('float64'), event_N) 
 
     # make sure the index is sorted
     sorted_indices = numpy.argsort(unsorted_hashed_event_numbers)
@@ -71,10 +70,17 @@ class Reader:
     self.event_tree.BuildIndex("event.event_number")
     self.event_entry = -1; 
 
-    self.head_file = ROOT.TFile.Open("%s/run%d/header.filtered.root" % (base_dir, run))
+    header_file_name = "header.root" 
+    if header_type is not None: 
+        header_file_name = "header.%s.root" % (header_type)
+
+    self.head_file = ROOT.TFile.Open("%s/run%d/%s" % (base_dir, run,header_file_name))
     self.head_tree = self.head_file.Get("header") 
     self.head_entry = -1
-    self.head_tree.BuildIndex("header.event_number % 1000000000", "header.board_id[0]==0") 
+    self.head_tree.BuildIndex("header.event_number % 1000000000", "header.trigger_type==4") 
+
+    header_N = self.head_tree.Draw("Entry$", "header.trigger_type!=4","goff") 
+    self.deep_entries = numpy.copy(numpy.frombuffer(self.head_tree.GetV1(), numpy.dtype('float64'), header_N))
 
     self.status_file = ROOT.TFile.Open("%s/run%d/status.root" % (base_dir, run))
     self.status_tree = self.status_file.Get("status") 
@@ -93,7 +99,7 @@ class Reader:
     self.setEntry(self.head_tree.GetEntryNumberWithIndex(i % 1000000000, 1 if surface else 0)) 
 
   def setDeepEntry(self,i):
-    self.setEvent(i+1) 
+    self.setEntry(int(self.deep_entries[i]))
 
   def event(self,force_reload = False): 
     if (self.event_entry != self.current_entry or force_reload):
