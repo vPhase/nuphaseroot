@@ -1,11 +1,12 @@
 
 #include "nuphaseCombinedEvent.h" 
 
-ClassImp(nuphase::CombinedEvent); 
 #include "TPad.h" 
 #include "TCanvas.h" 
 #include "TGraph.h" 
+#include "TAxis.h" 
 
+ClassImp(nuphase::CombinedEvent); 
 #ifdef HAVE_ARAROOT
 #include "RawAtriStationEvent.h" 
 #include "UsefulAtriStationEvent.h" 
@@ -22,12 +23,6 @@ ClassImp(nuphase::CombinedEvent);
 
 
 
-
-const nuphase::CombinedEvent::Opts & nuphase::CombinedEvent::Opts::defaultOpts() 
-{
-  static Opts opts; 
-  return opts; 
-}
 
 
 static std::map<int,std::string> a5_map; 
@@ -220,6 +215,37 @@ nuphase::CombinedEvent::CombinedEvent(const Header * nuphase_header, const Event
 }
 
 
+
+#else 
+
+
+
+nuphase::CombinedEvent * nuphase::CombinedEvent::makeCombinedEvent(int nuphase_run, int nuphase_index, int a5_run, int a5_index, const Opts & opts, nuphase::CombinedEvent * useme) 
+{
+  fprintf(stderr,"NOT BUILT WITH ARAROOT SUPPORT, CANNOT MAKE CombinedEvent\n"); 
+  return 0; 
+}
+
+nuphase::CombinedEvent::CombinedEvent(const Header * nuphase_header, const Event * nuphase_event, 
+                    const UsefulAtriStationEvent  * ara_event, const nuphase::CombinedEvent::Opts & opts) 
+{
+  fprintf(stderr,"NOT BUILT WITH ARAROOT SUPPORT, CANNOT MAKE CombinedEvent\n"); 
+  did_we_align = false; 
+  nuphase_run = -1; 
+  nuphase_entry = -1; 
+  ara_event_id = -1; 
+
+}
+#endif
+
+
+
+const nuphase::CombinedEvent::Opts & nuphase::CombinedEvent::Opts::defaultOpts() 
+{
+  static Opts opts; 
+  return opts; 
+}
+
 TGraph * nuphase::CombinedEvent::makeGraph(int chan, TGraph * useme) const
 {
   TGraph * g = useme; 
@@ -275,13 +301,5 @@ void nuphase::CombinedEvent::drawAll(TVirtualPad * pad, int max_width)
   }
 
 }
-
-
-
-#endif
-
-
-
-
 
 
