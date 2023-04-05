@@ -10,10 +10,9 @@ nuphase::CalibrationInfo::CalibrationInfo()
   nuphase_fiber_delay = 4.880; //ns/m
 
   
-  const static double temp_len[k::num_boards][k::num_chans_per_board] = {{2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 10.0},
-									{12.0, 14.0, 1.0, 10.0, 0.0, 0.0, 0.0, 0.0}};
+  const static double temp_len[k::num_boards][k::num_chans_per_board] = {{2.0, 3.13827759, 3.98370041, 5.09002215, 6.0269715, 29.0401805, 8.16781324, 10.0752401},
+                                                                         {12.0, 14.0, 23.4384754, -2.97043852, 23.3151191, -1.34546578, 23.8567027, -0.55532582}};
   memcpy(nuphase_fiber_length, temp_len, sizeof(temp_len)); 
-
 
   for (int board = 0; board < k::num_boards; board++)
   {
