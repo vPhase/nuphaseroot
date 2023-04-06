@@ -1,6 +1,7 @@
 #ifndef NUPHASE_CALIBRATION_INFO_HH
 #define NUPHASE_CALIBRATION_INFO_HH
 
+#include <vector>
 #include "TObject.h" 
 #include "nuphaseConsts.h" 
 
@@ -25,6 +26,11 @@ namespace nuphase
       units getTimeUnits()const  { return t; }
       units getVoltageUnits()const  { return v; }
 
+      std::vector<double> getChanPosition(int chan, board b = BOARD_MASTER) const;
+      double getChanPositionX(int chan, board b = BOARD_MASTER) const { return chan_position[b][chan][0]; }
+      double getChanPositionY(int chan, board b = BOARD_MASTER) const { return chan_position[b][chan][1]; }
+      double getChanPositionZ(int chan, board b = BOARD_MASTER) const { return chan_position[b][chan][2]; }
+
     private: 
       double time_calibration; 
       double voltage_calibration[k::num_boards][k::num_chans_per_board]; 
@@ -34,7 +40,9 @@ namespace nuphase
       double nuphase_fiber_length[k::num_boards][k::num_chans_per_board];
       double nuphase_fiber_delay;
 
-      ClassDef(CalibrationInfo,2); 
+      double chan_position[k::num_boards][k::num_chans_per_board][3];
+
+      ClassDef(CalibrationInfo,3); 
   }; 
 
 }
