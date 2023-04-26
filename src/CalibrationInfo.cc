@@ -36,7 +36,7 @@ nuphase::CalibrationInfo::CalibrationInfo()
                                                                              {0,0,-180.79}}, // 7 (chan 7) 
                                                                             { // board 1
                                                                              {0,0,-182.79}, // 0 (chan 8, Hpol positions are a guesstimate ^-^)
-                                                                             {0,0,-183.79}, // 1 (chan 9, Hpol positions are a guesstimate ^-^)
+                                                                             {0,0,-184.79}, // 1 (chan 9, Hpol positions are a guesstimate ^-^)
                                                                              {-12.9616,-8.6511,-177.7466}, // 2 (chan 10 = ARA RFchan 6 =  ARA elecChan 16)
                                                                              {12.3428,-31.8885,-161.02376}, // 3 (chan 11 = ARA RFchan 3 = ARA elecChan 25)
                                                                              {1.5493,15.6665,-196.2045}, // 4 (chan 12 = ARA RFchan 5 = ARA elecChan 0)
