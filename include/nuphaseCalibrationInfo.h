@@ -21,7 +21,9 @@ namespace nuphase
       double getVoltageCalibration(board b, int chan) const { return voltage_calibration[b][chan]; } 
       double getTimeCalibration() const { return time_calibration; } 
       double getLenDelayConst() const { return nuphase_fiber_delay; } 
-      double getCableLen(board b, int chan) const { return nuphase_fiber_length[b][chan]; } 
+      double getCableLen(uint64_t event_number, board b, int chan) const { return (event_number < fiber_length_config_threshold)?
+                                                                                      nuphase_fiber_length[0][b][chan] :
+                                                                                      nuphase_fiber_length[1][b][chan]; } 
 
       units getTimeUnits()const  { return t; }
       units getVoltageUnits()const  { return v; }
@@ -36,8 +38,9 @@ namespace nuphase
       double voltage_calibration[k::num_boards][k::num_chans_per_board]; 
       units t; 
       units v; 
-      
-      double nuphase_fiber_length[k::num_boards][k::num_chans_per_board];
+     
+      uint64_t fiber_length_config_threshold = 5930*uint64_t(1e9);
+      double nuphase_fiber_length[2][k::num_boards][k::num_chans_per_board];
       double nuphase_fiber_delay;
 
       double chan_position[k::num_boards][k::num_chans_per_board][3];

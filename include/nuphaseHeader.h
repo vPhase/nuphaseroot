@@ -52,6 +52,7 @@ namespace nuphase
       bool isRFTrigger() const { return trigger_type == TRIGGER_RF ; } 
       bool isSurfaceTrigger() const { return trigger_type == TRIGGER_SURFACE ; } 
       uint64_t getEventNumber() const { return event_number ; } 
+      uint32_t getLivetimeConfiguration(uint64_t event_no) const;
 
       /** The data members (mostly the same as the struct in libnuphase) */ 
       uint64_t event_number; 
