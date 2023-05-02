@@ -99,7 +99,7 @@ TGraph * nuphase::Event::getGraph(int channel, board b, TGraph * g) const
 
   for (int i = 0; i < g->GetN(); i++) 
   {
-    double offset = calibration.getLenDelayConst() * calibration.getCableLen(b, channel); 
+    double offset = calibration.getLenDelayConst() * calibration.getCableLen(event_number, b, channel); 
     g->GetX()[i] = i * calibration.getTimeCalibration() - offset;
   }
 
