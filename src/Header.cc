@@ -69,3 +69,18 @@ nuphase::Header::Header()
       corrected_trigger_time_ns = 0; 
 }
 
+uint32_t nuphase::Header::getLivetimeConfiguration(uint64_t event_no)
+  const
+{
+    if(event_no < 1746*uint64_t(1e9))
+      return 1;
+    else if(event_no < 3836*uint64_t(1e9))
+      return 2;
+    else if(event_no < 4022*uint64_t(1e9))
+      return 3;
+    else if(event_no < 5929*uint64_t(1e9))
+      return 4;
+    else
+      return 5;
+}
+
