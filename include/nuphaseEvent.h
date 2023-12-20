@@ -62,6 +62,8 @@ namespace nuphase
       uint64_t getEventNumber() const { return event_number; } 
       bool isSurface() const { return !board_id[0] && board_id[1]; } 
 
+      double getCableDelay(int channel = 0, board b = BOARD_MASTER) const;
+
     private: 
       /** The event number */ 
       uint64_t event_number; 

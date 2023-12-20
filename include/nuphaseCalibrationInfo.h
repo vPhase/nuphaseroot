@@ -1,6 +1,7 @@
 #ifndef NUPHASE_CALIBRATION_INFO_HH
 #define NUPHASE_CALIBRATION_INFO_HH
 
+#include <iostream>
 #include <vector>
 #include "TObject.h" 
 #include "nuphaseConsts.h" 
@@ -21,9 +22,7 @@ namespace nuphase
       double getVoltageCalibration(board b, int chan) const { return voltage_calibration[b][chan]; } 
       double getTimeCalibration() const { return time_calibration; } 
       double getLenDelayConst() const { return nuphase_fiber_delay; } 
-      double getCableLen(uint64_t event_number, board b, int chan) const { return (event_number < fiber_length_config_threshold)?
-                                                                                      nuphase_fiber_length[0][b][chan] :
-                                                                                      nuphase_fiber_length[1][b][chan]; } 
+      double getCableLen(uint64_t event_number, board b, int chan) const; 
 
       units getTimeUnits()const  { return t; }
       units getVoltageUnits()const  { return v; }
@@ -39,8 +38,8 @@ namespace nuphase
       units t; 
       units v; 
      
-      uint64_t fiber_length_config_threshold = 5930*uint64_t(1e9);
-      double nuphase_fiber_length[2][k::num_boards][k::num_chans_per_board];
+      const static int num_fiber_length_configs = 4;
+      double nuphase_fiber_length[num_fiber_length_configs][k::num_boards][k::num_chans_per_board];
       double nuphase_fiber_delay;
 
       double chan_position[k::num_boards][k::num_chans_per_board][3];
