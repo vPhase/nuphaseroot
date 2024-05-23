@@ -74,6 +74,8 @@ namespace nuphase
   const char * getUnitString(units u); 
   const char * getBoardString(board b); 
 
+  const double nominalMasterClockRate = 94e6; // Hz
+
 }
 
 #endif

@@ -69,6 +69,15 @@ nuphase::Header::Header()
       corrected_trigger_time_ns = 0; 
 }
 
+double nuphase::Header::getBoardTrigTimeOffsetNs(board which) 
+  const 
+{ 
+  if(which == BOARD_MASTER)
+    return 0;
+
+  return (trig_time[BOARD_SLAVE]-trig_time[BOARD_MASTER])/nominalMasterClockRate*1e9; 
+}
+
 uint32_t nuphase::Header::getLivetimeConfiguration(uint64_t event_no)
   const
 {
@@ -82,5 +91,17 @@ uint32_t nuphase::Header::getLivetimeConfiguration(uint64_t event_no)
       return 4;
     else
       return 5;
+}
+
+// checks event quality based on basic consistency checks
+bool nuphase::Header::isGoodEvent() 
+  const
+{
+
+  // check if boards are out of sync
+  if(abs(trig_time[BOARD_MASTER]-trig_time[BOARD_SLAVE]) > 5)
+    return false;
+
+  return true;
 }
 

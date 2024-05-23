@@ -46,6 +46,7 @@ namespace nuphase
       uint32_t getReadoutTimeNs(board which = BOARD_MASTER) const { return readout_time_ns[which]; } 
       double  getReadoutTimeFloat(board which= BOARD_MASTER) const { return readout_time[which] + 1e-9 * readout_time_ns[which]; } 
       uint64_t getTrigTime(board which = BOARD_MASTER) const { return trig_time[which]; } 
+      double getBoardTrigTimeOffsetNs(board which) const;
       uint32_t getBeamPower(int beam) const  { return beam_power[beam]; } 
       uint8_t getChannelReadMask(board which = BOARD_MASTER)  const { return channel_read_mask[which]; } 
       uint8_t getBoardID(board which = BOARD_MASTER) const { return board_id[which]; }
@@ -53,6 +54,7 @@ namespace nuphase
       bool isSurfaceTrigger() const { return trigger_type == TRIGGER_SURFACE ; } 
       uint64_t getEventNumber() const { return event_number ; } 
       uint32_t getLivetimeConfiguration(uint64_t event_no) const;
+      bool isGoodEvent() const;
 
       /** The data members (mostly the same as the struct in libnuphase) */ 
       uint64_t event_number; 
