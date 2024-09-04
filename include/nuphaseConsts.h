@@ -75,7 +75,7 @@ namespace nuphase
   const char * getBoardString(board b); 
 
   const double nominalMasterClockRate = 94e6; // Hz
-
+  const double adcToVoltageConversion = 0.87e3/128; // mV/adc
 }
 
 #endif

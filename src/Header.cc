@@ -72,7 +72,7 @@ nuphase::Header::Header()
 double nuphase::Header::getBoardTrigTimeOffsetNs(board which) 
   const 
 { 
-  if(which == BOARD_MASTER)
+  if(which == BOARD_MASTER) 
     return 0;
 
   return (trig_time[BOARD_SLAVE]-trig_time[BOARD_MASTER])/nominalMasterClockRate*1e9; 

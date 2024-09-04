@@ -113,7 +113,7 @@ TGraph * nuphase::Event::getGraph(int channel, board b, TGraph * g) const
 double nuphase::Event::getCableDelay(int channel, board b)
   const
 {
-    return calibration.getLenDelayConst() * calibration.getCableLen(event_number, b, channel); 
+    return calibration.getLenDelayConst() * calibration.getCableLen(b, channel); 
 }
 
 
