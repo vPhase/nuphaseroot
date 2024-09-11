@@ -75,7 +75,8 @@ double nuphase::Header::getBoardTrigTimeOffsetNs(board which)
   if(which == BOARD_MASTER) 
     return 0;
 
-  return (trig_time[BOARD_SLAVE]-trig_time[BOARD_MASTER])/nominalMasterClockRate*1e9; 
+  int64_t offset = trig_time[BOARD_SLAVE] - trig_time[BOARD_MASTER];
+  return offset/nominalMasterClockRate*1e9; 
 }
 
 uint32_t nuphase::Header::getLivetimeConfiguration(uint64_t event_no)
@@ -99,7 +100,10 @@ bool nuphase::Header::isGoodEvent()
 {
 
   // check if boards are out of sync
-  if(abs(trig_time[BOARD_MASTER]-trig_time[BOARD_SLAVE]) > 5)
+  uint64_t trigMaster = trig_time[BOARD_MASTER];
+  uint64_t trigSlave = trig_time[BOARD_SLAVE];
+  int64_t absDiff = (trigMaster > trigSlave)? trigMaster - trigSlave : trigSlave - trigMaster;
+  if(absDiff > 5) 
     return false;
 
   return true;
