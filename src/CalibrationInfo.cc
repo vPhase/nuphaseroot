@@ -39,10 +39,10 @@ nuphase::CalibrationInfo::CalibrationInfo()
                                                                              {0,0,-184.79}, // 1 (chan 9, Hpol positions are a guesstimate ^-^)
                                                                              {-12.9616,-8.6511,-177.7466}, // 2 (chan 10 = ARA RFchan 6 =  ARA elecChan 16)
                                                                              {12.3428,-31.8885,-161.02376}, // 3 (chan 11 = ARA RFchan 3 = ARA elecChan 25)
-                                                                             {1.5493,15.6665,-196.2045}, // 4 (chan 12 = ARA RFchan 5 = ARA elecChan 0)
-                                                                             {1.5458,15.6587,-166.5366}, // 5 (chan 13 = ARA RFchan 1 = ARA elecChan 1)
-                                                                             {29.6505,-3.2845,-194.739}, // 6 (chan 14 = ARA RFchan 4 = ARA elecChan 8)
-                                                                             {29.6347,-3.3004,-165.0948}}}; // 7 (chan 15 = ARA RFchan 0 = ARA elecChan 9)
+                                                                             {29.6505,-3.2845,-194.739}, // 4 (chan 12 = ARA RFchan 4 = ARA elecChan 0)
+                                                                             {29.6347,-3.3004,-165.0948}, // 5 (chan 13 = ARA RFchan 0 = ARA elecChan 1)
+                                                                             {1.5493,15.6665,-196.2045}, // 6 (chan 14 = ARA RFchan 5 = ARA elecChan 8)
+                                                                             {1.5458,15.6587,-166.5366}}}; // 7 (chan 15 = ARA RFchan 1 = ARA elecChan 9)
   memcpy(chan_position, temp_pos, sizeof(temp_pos));
 }
 
