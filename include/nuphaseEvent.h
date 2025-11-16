@@ -78,7 +78,22 @@ namespace nuphase
 
     ClassDef(Event,3); 
 
-  }; 
+  };
+
+// tell ROOT how to skip reading in the calibration object 
+// for versions where it was persistent, since this is a 
+// non-primitive data type
+#if defined(__ROOTCLING__)
+#pragma read                                              \
+  sourceClass="nuphase::Event"                            \
+  version="[1-2]"                                         \
+  targetClass="nuphase::Event"                            \
+  source="nuphase::CalibrationInfo calibration"           \
+  target=""                                               \
+  code="{ /* ignore old calibration for versions 1 and 2 */ }"
+#endif
+
+ 
 } 
 
 #endif
